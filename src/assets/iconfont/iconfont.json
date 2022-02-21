@@ -1,0 +1,30 @@
+{
+  "id": "3187465",
+  "name": "universe",
+  "font_family": "iconfont",
+  "css_prefix_text": "icon-",
+  "description": "",
+  "glyphs": [
+    {
+      "icon_id": "1261596",
+      "name": "facebook",
+      "font_class": "facebook",
+      "unicode": "e676",
+      "unicode_decimal": 58998
+    },
+    {
+      "icon_id": "4936972",
+      "name": "instagram",
+      "font_class": "instagram",
+      "unicode": "e87f",
+      "unicode_decimal": 59519
+    },
+    {
+      "icon_id": "12856611",
+      "name": "Twitter",
+      "font_class": "Twitter",
+      "unicode": "e62d",
+      "unicode_decimal": 58925
+    }
+  ]
+}
