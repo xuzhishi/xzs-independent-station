@@ -1,0 +1,13 @@
+[debug] [2022-02-22T07:04:13.324Z] ----------------------------------------------------------------------
+[debug] [2022-02-22T07:04:13.325Z] Command:       /usr/local/bin/firebase /home/lu/.cache/firebase/tools/lib/node_modules/firebase-tools/lib/bin/firebase deploy
+[debug] [2022-02-22T07:04:13.325Z] CLI Version:   10.2.1
+[debug] [2022-02-22T07:04:13.325Z] Platform:      linux
+[debug] [2022-02-22T07:04:13.325Z] Node Version:  v12.18.1
+[debug] [2022-02-22T07:04:13.325Z] Time:          Tue Feb 22 2022 15:04:13 GMT+0800 (China Standard Time)
+[debug] [2022-02-22T07:04:13.325Z] ----------------------------------------------------------------------
+[debug] 
+[debug] [2022-02-22T07:04:13.361Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2022-02-22T07:04:13.361Z] > authorizing via signed-in user (caolu@xdtx.org)
+[debug] [2022-02-22T07:04:13.361Z] [iam] checking project xdtx-6abd1 for permissions ["firebase.projects.get","firebasehosting.sites.update"]
+[debug] [2022-02-22T07:04:13.367Z] >>> [apiv2][query] POST https://cloudresourcemanager.googleapis.com/v1/projects/xdtx-6abd1:testIamPermissions [none]
+[debug] [2022-02-22T07:04:13.367Z] >>> [apiv2][body] POST https://cloudresourcemanager.googleapis.com/v1/projects/xdtx-6abd1:testIamPermissions {"permissions":["firebase.projects.get","firebasehosting.sites.update"]}
