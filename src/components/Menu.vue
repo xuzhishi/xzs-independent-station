@@ -32,15 +32,19 @@
 export default {
   data() {
     return {
-      activeIndex: "",
+      activeIndex: "/",
     };
   },
   mounted() {
     this.activeIndex = window.location.pathname;
   },
+  watch: {
+    $route(to) {
+      this.activeIndex = to.path;
+    },
+  },
   methods: {
     handleSelect(key) {
-      console.log(key);
       this.activeIndex = key;
     },
     routeToClick(path) {
@@ -53,6 +57,8 @@ export default {
 <style lang='scss' scoped>
 ::v-deep.el-menu.el-menu--horizontal {
   border-bottom: none;
+  width: 1200px;
+  margin: 0 auto;
   margin-top: 20px;
 }
 ::v-deep.el-menu--horizontal > .el-menu-item.is-active {

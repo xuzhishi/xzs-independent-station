@@ -3,10 +3,10 @@ div
   .contents(v-for="(item, index) in contents", :key="index")
     p {{ item }}
   p.content-bottom {{ $t('Metaverse.link') }}
-    span.content-link https://hello.vrchat.com/
+    a.content-link(href="https://hello.vrchat.com/", target="_blank") https://hello.vrchat.com/
     span {{ $t('Metaverse.content_bottom_1') }}
     span.content-link {{ $t('Metaverse.content_bottom_2') }}
-    span {{ $t('Metaverse.content_bottom_3') }}
+    //- span {{ $t('Metaverse.content_bottom_3') }}
 </template>
 
 <script>

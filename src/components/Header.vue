@@ -2,7 +2,7 @@
 .isc-header
   //- Logo
   Menu
-  PersonInfo
+  //- PersonInfo
 </template>
 
 <script>
@@ -13,7 +13,11 @@ export default {
   components: {
     // Logo: () => import("./Logo"),
     Menu: () => import("./Menu"),
-    PersonInfo: () => import("./PersonInfo.vue"),
+    // PersonInfo: () => import("./PersonInfo.vue"),
+  },
+  mounted() {
+    localStorage.setItem("locale", "en-US");
+    this.$i18n.locale = "en-US";
   },
 };
 </script>

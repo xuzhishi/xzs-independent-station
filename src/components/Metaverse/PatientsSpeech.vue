@@ -110,7 +110,7 @@ export default {
   margin-bottom: 95px;
   position: relative;
   .btn {
-    width: 195px;
+    width: 230px;
     height: 37px;
     background: #56a4cb;
     border-radius: 5px;

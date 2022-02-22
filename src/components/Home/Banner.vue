@@ -5,7 +5,7 @@ div
       .banner-left
         .title XDTX Metaverse
         .subTitle {{ $t('home.bannerTitle') }}
-        .btn {{ $t('home.bannerBth') }}
+        .btn(@click="learnMoreClick") {{ $t('home.bannerBth') }}
       .banner-right
         img.right-img(src="./../../assets/image/banner__img.png")
   .listen-voice
@@ -19,14 +19,107 @@ div
       p.right-content {{ $t('home.listen__content3') }}
       p.right-content {{ $t('home.listen__content4') }}
       p.right-content {{ $t('home.listen__content5') }}
-      .btn {{ $t('home.listen__btn') }}
+      .btn(@click="dialogFormVisible = true") {{ $t('home.listen__btn') }}
+  el-dialog(title="预约医生", :visible.sync="dialogFormVisible")
+    el-form(:model="form", :rules="rules", ref="form")
+      el-form-item(label="联系方式", :label-width="formLabelWidth", prop="phone")
+        el-input(
+          v-model="form.phone",
+          autocomplete="off",
+          placeholder="请输入手机号"
+        )
+      el-form-item(label="预约时间", :label-width="formLabelWidth", prop="time")
+        el-date-picker(v-model="form.time", type="date", placeholder="请选择日期")
+      el-form-item(
+        label="科室疾病",
+        :label-width="formLabelWidth",
+        prop="textarea"
+      )
+        el-input(
+          type="textarea",
+          :rows="2",
+          placeholder="请填写您想预约的科室疾病",
+          v-model="form.textarea"
+        )
+      el-form-item(label="备注", :label-width="formLabelWidth") 
+        el-input(
+          type="textarea",
+          :rows="2",
+          placeholder="可留下您的问题或需求",
+          v-model="form.textarea1"
+        )
+    .dialog-footer(slot="footer")
+      el-button(@click="dialogFormVisible = false") 取 消
+      el-button(type="primary", @click="submitForm('form')") 确 定
 </template>
 
 <script>
-export default {};
+export default {
+  data() {
+    return {
+      dialogFormVisible: false,
+      form: {
+        phone: "",
+        time: "",
+        textarea: "",
+        textarea1: "",
+      },
+      formLabelWidth: "100px",
+      rules: {
+        phone: [
+          { required: true, message: "请输入联系方式", trigger: "blur" },
+          { min: 11, max: 11, message: "长度在11个字符", trigger: "blur" },
+        ],
+        time: [
+          { required: true, message: "请选择预约时间", trigger: "change" },
+        ],
+        textarea: [
+          {
+            required: true,
+            message: "请填写您想预约的科室疾病",
+            trigger: "blur",
+          },
+        ],
+      },
+    };
+  },
+  methods: {
+    learnMoreClick() {
+      this.$router.push("/xdtx");
+    },
+    submitForm(formName) {
+      this.$refs[formName].validate((valid) => {
+        if (valid) {
+          this.dialogFormVisible = false;
+        } else {
+          console.log("error submit!!");
+          return false;
+        }
+      });
+    },
+  },
+};
 </script>
 
 <style lang="scss" scoped>
+::v-deep .el-dialog {
+  width: 32%;
+  .el-input__inner {
+    width: 94%;
+    margin-left: -29px;
+  }
+  .el-textarea__inner {
+    width: 94%;
+  }
+  .el-date-editor.el-input,
+  .el-date-editor.el-input__inner {
+    width: 100%;
+    margin-left: 29px;
+  }
+  .el-input__icon {
+    margin-left: -29px;
+  }
+}
 .banner {
   width: 100%;
   height: 828px;
@@ -73,6 +166,7 @@ export default {};
         text-align: center;
         line-height: 37px;
         margin-top: 37px;
+        cursor: pointer;
       }
     }
     .banner-right {
@@ -105,7 +199,7 @@ export default {};
       width: 100%;
       font-family: Microsoft YaHei UI;
       font-weight: bold;
-      font-size: 48px;
+      font-size: 30px;
       color: #393837;
       position: absolute;
       top: 50%;
@@ -131,7 +225,7 @@ export default {};
       color: #393837;
     }
     .btn {
-      width: 122px;
+      width: 400px;
       height: 37px;
       background: #56a4cb;
       border-radius: 5px;
@@ -143,6 +237,7 @@ export default {};
       text-align: center;
       line-height: 37px;
       margin-top: 37px;
+      cursor: pointer;
     }
   }
 }

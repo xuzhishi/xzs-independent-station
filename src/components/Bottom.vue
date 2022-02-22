@@ -5,23 +5,23 @@ div
     ul.line1
       li 
         img(src="./../assets/image/logo.png", width="106")
-      li 497 Evergreen Rd. Roseville, CA
-      li 95673 +44 345 678 903
-      li luxury_hotels@gmail.com
-    ul.line2
-      li About Us
-      li Contact
-      li Terms & Conditions
-    ul.line2
-      li
-        span.iconfont.icon-facebook(style="margin-right: 27px")
-        span Facebook
-      li 
-        span.iconfont.icon-Twitter(style="margin-right: 27px")
-        span Twitter
-      li 
-        span.iconfont.icon-Twitter(style="margin-right: 27px")
-        span Instagram
+      //- li 497 Evergreen Rd. Roseville, CA
+      //- li 95673 +44 345 678 903
+      li contact@xdtx.org
+    //- ul.line2
+    //-   li About Us
+    //-   li Contact
+    //-   li Terms & Conditions
+    //- ul.line2
+    //-   li
+    //-     span.iconfont.icon-facebook(style="margin-right: 27px")
+    //-     span Facebook
+    //-   li 
+    //-     span.iconfont.icon-Twitter(style="margin-right: 27px")
+    //-     span Twitter
+    //-   li 
+    //-     span.iconfont.icon-Twitter(style="margin-right: 27px")
+    //-     span Instagram
     ul
       li Subscribe to our newsletter
       li 

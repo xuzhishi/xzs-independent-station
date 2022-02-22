@@ -7,7 +7,7 @@ div
       p(style="margin-bottom: 20px") {{ item.content }}
       p {{ item.content1 }}
       p {{ item.content2 }}
-  h5 {{ $t('Recruitment.content_bottom_1') }}<span style="color:#56A4CB;">kangcheng@xuzhishi.com</span>{{ $t('Recruitment.content_bottom_2') }}
+  h5 {{ $t('Recruitment.content_bottom_1') }}<span style="color:#56A4CB;">contact@xdtx.org</span>{{ $t('Recruitment.content_bottom_2') }}
 </template>
 
 <script>

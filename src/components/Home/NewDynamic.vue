@@ -2,7 +2,7 @@
 div
   .describe
     p {{ $t('home.describe1') }}
-    p {{ $t('home.describe2') }}
+    //- p {{ $t('home.describe2') }}
   .listen-voice
     .listen-right
       .company-describe
@@ -22,7 +22,7 @@ div
         p.right-content {{ $t('home.company__content__5') }}
     .listen-left
       .left-content {{ $t('home.compay__title') }}
-      .btn {{ $t('home.bannerBth') }}
+      //- .btn {{ $t('home.bannerBth') }}
 </template>
 
 <script>
@@ -39,6 +39,8 @@ export default {};
     line-height: 25px;
     text-align: center;
     color: #56a4cb;
+    width: 1026px;
+    margin: 0 auto;
   }
 }
 .listen-voice:hover {
@@ -58,7 +60,7 @@ export default {};
       width: 100%;
       font-family: Microsoft YaHei UI;
       font-weight: bold;
-      font-size: 48px;
+      font-size: 30px;
       color: #393837;
       position: absolute;
       left: 50%;
@@ -124,7 +126,7 @@ export default {};
       width: 100%;
       font-family: Microsoft YaHei UI;
       font-weight: bold;
-      font-size: 48px;
+      font-size: 30px;
       color: #393837;
       position: absolute;
       left: 50%;

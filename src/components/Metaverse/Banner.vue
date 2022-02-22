@@ -2,7 +2,7 @@
 div
   h2 XDTX Metaverse
   .banner
-    .link {{ $t('Metaverse.banner__link') }}
+    a.link(href="https://hello.vrchat.com/", target="_blank") {{ $t('Metaverse.banner__link') }}
 </template>
 
 <script>
@@ -34,6 +34,7 @@ h2 {
     position: absolute;
     left: 6px;
     bottom: 10px;
+    text-decoration: none;
   }
 }
 </style>

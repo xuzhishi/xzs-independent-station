@@ -4,16 +4,24 @@ div
     .about-left
       h2 {{ $t('About.title') }}
       .content {{ $t('About.content') }}
-      img.about-img(src="./../../assets/image/about__banner.png", width="635")
+      img.about-img(src="./../../assets/image/about__banner1.png", width="635")
     .about-right
       h5 {{ $t('About.doctor_describe_title') }}
       .right-block
-        img(src="./../../assets/image/doctor__1.png")
+        img(
+          src="./../../assets/image/doctor__1.png",
+          width="179",
+          height="232"
+        )
         .right-content
           p.title {{ $t('About.doctor_subTitle_1') }}
           p.content {{ $t('About.doctor_content_1') }}
       .right-block 
-        img(src="./../../assets/image/doctor__2.png")
+        img(
+          src="./../../assets/image/doctor__2.png",
+          width="179",
+          height="263"
+        )
         .right-content
           p.title {{ $t('About.doctor_subTitle_2') }}
           p.content {{ $t('About.doctor_content_2') }}
@@ -52,12 +60,13 @@ export default {};
       margin-top: 73px;
     }
     .about-img {
-      margin-top: 75px;
+      margin-top: 142px;
+      height: 457px;
     }
   }
   .about-right {
     width: 499px;
-    height: 613px;
+    // height: 613px;
     background: #eeedeb;
     margin-top: 72px;
     h5 {
@@ -78,7 +87,7 @@ export default {};
         width: 280px;
         margin-left: 12px;
         font-family: Microsoft YaHei UI;
-        font-size: 16px;
+        font-size: 14px;
         line-height: 20px;
         color: #393837;
         text-align: left;
