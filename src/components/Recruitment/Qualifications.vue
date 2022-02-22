@@ -50,7 +50,7 @@ export default {
   margin: 0 auto;
   margin-top: 170px;
   position: relative;
-  margin-bottom: 95px;
+  margin-bottom: 190px;
   .left-1 {
     width: 413px;
     h5 {
