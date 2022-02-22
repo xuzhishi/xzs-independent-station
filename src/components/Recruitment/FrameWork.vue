@@ -24,7 +24,7 @@ div
     //-   p(style="margin-bottom: 20px") {{ item.content }}
     //-   p {{ item.content1 }}
     //-   p {{ item.content2 }}
-  h5.link {{ $t('Recruitment.content_bottom_1') }}<span style="color:#56A4CB;">contact@xdtx.org</span>{{ $t('Recruitment.content_bottom_2') }}
+  h5.link {{ $t('Recruitment.content_bottom_1') }}<span style="color:#56A4CB;font-weight:bold;">contact@xdtx.org</span>{{ $t('Recruitment.content_bottom_2') }}
 </template>
 
 <script>
@@ -136,6 +136,7 @@ export default {
         left: -20px;
         display: none;
         z-index: 30;
+        box-shadow: 0px 0px 8px #888888;
         p {
           font-family: Microsoft YaHei UI;
           font-size: 12px;
@@ -166,6 +167,9 @@ export default {
   }
 }
 .link {
-  font-size: 16px;
+  font-size: 18px;
+  width: 845px;
+  margin: 0 auto;
+  line-height: 24px;
 }
 </style>
