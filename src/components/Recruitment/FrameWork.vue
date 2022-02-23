@@ -107,7 +107,7 @@ export default {
     height: 700px;
     .content-recruitment {
       width: 360px;
-      height: 224px;
+      // height: 224px;
       position: relative;
       .content-list {
         width: 360px;
@@ -129,27 +129,27 @@ export default {
       }
 
       .list-content {
-        width: 400px;
+        width: 360px;
         background: #fff;
         position: absolute;
         top: 290px;
-        left: -20px;
+        // left: -20px;
         display: none;
         z-index: 30;
-        box-shadow: 0px 0px 8px #888888;
+        box-shadow: 0px 10px 8px #888888;
         p {
           font-family: Microsoft YaHei UI;
           font-size: 12px;
           line-height: 20px;
           color: #393837;
-          width: 360px;
+          width: 340px;
           margin: 0 auto;
           margin-top: 10px;
         }
         .content3 {
           .content3-recruitment {
             h5 {
-              margin-left: 20px;
+              margin-left: 10px;
             }
           }
         }
@@ -157,6 +157,10 @@ export default {
     }
     .content-recruitment:hover .list-content {
       display: block;
+    }
+    .content-recruitment:hover {
+      width: 360;
+      box-shadow: 0px 0px 8px #888888;
     }
   }
   .content:nth-of-type(6),
