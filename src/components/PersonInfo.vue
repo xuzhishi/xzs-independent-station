@@ -1,44 +1,50 @@
 <template lang="pug">
-.personInfo
-  span.login 登录
-  img.person-logo(src="@/assets/image/person.png")
-  .language
-    el-select(v-model="value", placeholder="请选择", @change="tab")
-      el-option(
-        v-for="item in options",
-        :key="item.value",
-        :label="item.label",
-        :value="item.value",
-        size="mini"
-      )
+div
+  .personInfo
+    span.login(@click="loginClick") 登录
+    img.person-logo(src="@/assets/image/person.png")
+  logo-dialog(
+    :centerDialogVisible="centerDialogVisible",
+    @confirmHandleClick="confirmHandleClick"
+  )
+  //- #demo 11
+    vue-metamask(userMessage="msg", @onComplete="onComplete") 
 </template>
 
 <script>
+import VueMetamask from "vue-metamask";
+import LogoDialog from "./logoDialog.vue";
+import { login } from "@/api/login.js";
+
 export default {
+  components: {
+    VueMetamask,
+    LogoDialog,
+  },
   data() {
     return {
-      options: [
-        {
-          value: "zh-CN",
-          label: "中文",
-        },
-        {
-          value: "en-US",
-          label: "英文",
-        },
-      ],
-      value: "zh-CN",
+      msg: "This is demo net work",
+      centerDialogVisible: false,
     };
   },
-  mounted() {
-    this.value = localStorage.getItem("locale");
-    localStorage.setItem("locale", this.value);
-    this.$i18n.locale = this.value;
-  },
   methods: {
-    tab(value) {
-      localStorage.setItem("locale", value);
-      this.$i18n.locale = value;
+    onComplete(data) {
+      console.log("data:", data);
+    },
+    loginClick() {
+      this.centerDialogVisible = true;
+    },
+    confirmHandleClick() {
+      this.centerDialogVisible = false;
+      if (window.ethereum) {
+        window.ethereum.enable().then(async (res) => {
+          var i = await login('https://us-central1-xdtx-6abd1.cloudfunctions.net/getToken',res[0])
+          console.log(i)
+          alert("当前钱包地址:" + res[0]);
+        });
+      } else {
+        alert("请安装MetaMask钱包");
+      }
     },
   },
 };
@@ -47,7 +53,7 @@ export default {
 <style lang="scss" scoped>
 .personInfo {
   margin-top: 20px;
-  width: 500px;
+  width: 200px;
   display: flex;
   justify-content: space-between;
   .login {
@@ -62,6 +68,7 @@ export default {
     line-height: 37px;
     align-items: center;
     color: #393837;
+    cursor: pointer;
   }
   .person-logo {
     position: relative;

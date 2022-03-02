@@ -3,7 +3,6 @@ div
   banner
   contents
   patientsSpeech
-  bottom
 </template>
 
 <script>
@@ -12,7 +11,6 @@ export default {
     banner: () => import("@/components/Metaverse/Banner.vue"),
     contents: () => import("@/components/Metaverse/Contents.vue"),
     patientsSpeech: () => import("@/components/Metaverse/PatientsSpeech.vue"),
-    bottom: () => import("@/components/Bottom.vue"),
   },
 };
 </script>

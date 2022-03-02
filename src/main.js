@@ -34,6 +34,9 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 getAnalytics(app);
 
+// 连接钱包
+import Web3 from 'web3'
+Vue.prototype.Web3 = Web3
 
 const i18n = new VueI18n({
   locale: 'zh-CN',    // 语言标识
@@ -43,7 +46,8 @@ const i18n = new VueI18n({
     'en-US': require('./i18n/lang/en')    // 英文语言包
   }
 })
-//
+
+let a = 100
 
 new Vue({
   i18n,
