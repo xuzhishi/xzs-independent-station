@@ -7,6 +7,9 @@ div
     center
   )
     img(src="./../assets/image/logo-dialog.png", width="195")
+    //- el-radio-group(v-model="identity")
+      el-radio(label='2') 医师
+      el-radio(label='1') 患者
     span Connect to fully enjoy XDTX experiences
     span.dialog-footer(slot="footer")
       el-button(type="primary", @click="confirmClick") Login with Your Wallet
@@ -17,14 +20,14 @@ div
 export default {
   props: ["centerDialogVisible"],
   data() {
-    return {};
-  },
-  mounted() {
-    console.log(this.centerDialogVisible);
+    return {
+      // identity:'1',
+    };
   },
   methods: {
     confirmClick() {
       this.$emit("confirmHandleClick");
+      // console.log(this.identity)
     },
   },
 };

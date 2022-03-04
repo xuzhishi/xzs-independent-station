@@ -6,7 +6,10 @@ import 'element-ui/lib/theme-chalk/index.css';
 // 多语言插件的配置引入
 import VueI18n from 'vue-i18n';
 import "./assets/iconfont/iconfont.css"
+// 配置cookie
+import cookie from 'vue-cookie'
 
+Vue.prototype.$cookie = cookie;
 Vue.config.productionTip = false
 Vue.use(ElementUI)
 Vue.use(VueI18n)
@@ -47,7 +50,6 @@ const i18n = new VueI18n({
   }
 })
 
-let a = 100
 
 new Vue({
   i18n,
