@@ -193,7 +193,7 @@ export default {
 .banner {
   width: 100%;
   height: 828px;
-  background: url("./../../assets/image/banner.png");
+  background: url("./../../assets/image/banner.jpg");
   background-size: 100% 908px;
   overflow: hidden;
   display: flex;
@@ -255,7 +255,7 @@ export default {
 .listen-voice {
   width: 1198px;
   height: 556px;
-  background: url("./../../assets/image/listen__banner.png");
+  background: url("./../../assets/image/listen__banner.jpg");
   background-size: 1198px 556px;
   margin: 60px auto;
   border: 1px solid #7a7a7a;

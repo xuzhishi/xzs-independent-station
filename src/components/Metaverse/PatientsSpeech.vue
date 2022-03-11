@@ -104,7 +104,7 @@ export default {
 .NFT-store {
   width: 1200px;
   height: 198px;
-  background: url("./../../assets/image/NFT__banner.png");
+  background: url("./../../assets/image/NFT__banner.jpg");
   background-size: 1200px 198px;
   margin: 0 auto;
   margin-bottom: 95px;

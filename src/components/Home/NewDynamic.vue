@@ -46,7 +46,7 @@ export default {};
 .listen-voice:hover {
   width: 1198px;
   height: 556px;
-  background: url("./../../assets/image/company__banner.png") no-repeat;
+  background: url("./../../assets/image/company__banner.jpg") no-repeat;
   background-size: 1198px 556px;
   margin: 95px auto;
   border: 1px solid #7a7a7a;
@@ -112,7 +112,7 @@ export default {};
 .listen-voice {
   width: 1198px;
   height: 556px;
-  background: url("./../../assets/image/company__banner.png");
+  background: url("./../../assets/image/company__banner.jpg");
   background-size: 1198px 556px;
   margin: 95px auto;
   border: 1px solid #7a7a7a;

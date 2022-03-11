@@ -30,7 +30,7 @@ h2 {
 .banner {
   width: 1199px;
   height: 518px;
-  background: url("./../../assets/image/recruitment__banner.png");
+  background: url("./../../assets/image/recruitment__banner.jpg");
   background-size: 1199px 518px;
   margin: 30px auto;
 }
