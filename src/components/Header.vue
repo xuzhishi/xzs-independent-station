@@ -24,7 +24,14 @@ export default {
 
 <style lang="scss" scoped>
 .isc-header {
+  width: 1200px;
   display: flex;
   justify-content: space-around;
+  background: rgba(0,0,0,0);
+  position: absolute;
+  z-index: 2;
+  left: 50%;
+  top:0;
+  transform: translateX(-50%);
 }
 </style>
