@@ -5,6 +5,7 @@ div
     :visible.sync="centerDialogVisible",
     width="30%",
     center
+    :close-on-click-modal="false"
   )
     img(src="./../assets/image/logo-dialog.png", width="195")
     //- el-radio-group(v-model="identity")
@@ -18,7 +19,11 @@ div
 
 <script>
 export default {
-  props: ["centerDialogVisible"],
+  props: {
+    centerDialogVisible:{
+      type:Boolean
+    }
+  },
   data() {
     return {
       // identity:'1',

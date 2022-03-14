@@ -6,7 +6,7 @@ div
     img.person-logo(:src="accountImg")
   logo-dialog(
     :centerDialogVisible="centerDialogVisible",
-    @confirmHandleClick="confirmHandleClick"
+    @confirmHandleClick="confirmHandleClick",
   )
   //- #demo 11
     vue-metamask(userMessage="msg", @onComplete="onComplete") 
@@ -41,27 +41,66 @@ export default {
       accountImg: require("@/assets/image/person.png"),
     };
   },
-  created() {
-    if (window.ethereum) {
-      window.ethereum.enable().then(async (res) => {
-        // this.loginService(res[0])
-        const db = getFirestore();
-        const docRef = doc(db, "user", res[0]);
-        const docSnap = await getDoc(docRef);
-        if (
-          docSnap.data().expiretime < new Date() ||
-          docSnap.data().token !== this.$cookie.get("token") ||
-          docSnap.data().expiretime != this.$cookie.get("expires")
-        ) {
-          this.show = true;
-        } else {
-          this.show = false;
-        }
-      });
-    } else {
-      alert("请安装MetaMask钱包");
-      this.show = true;
-    }
+  mounted() {
+    // if (window.ethereum) {
+    //   window.ethereum.enable().then(async (res) => {
+    //     console.log(res[0])
+    //     this.loginService(res[0])
+    //     const db = getFirestore();
+    //     const docRef = doc(db, "user", res[0]);
+    //     const docSnap = await getDoc(docRef);
+    //     console.log(docSnap.data())
+    //     if (
+    //       docSnap.data().expiretime < new Date() ||
+    //       docSnap.data().token !== this.$cookie.get("token") ||
+    //       docSnap.data().expiretime != this.$cookie.get("expires")
+    //     ) {
+    //       this.show = true;
+    //     } else {
+    //       this.show = false;
+    //     }
+    //   });
+    // } else {
+    //   alert("请安装MetaMask钱包");
+    //   this.show = true;
+    // }
+
+    this.centerDialogVisible = false;
+      if (window.ethereum) {
+        window.ethereum.enable().then(async (res) => {
+          // alert('当前钱包地址：'+res[0])
+          this.loginService(res[0]);
+          const db = getFirestore();
+          const docRef = doc(db, "user", res[0]);
+          const docSnap = await getDoc(docRef);
+          if (docSnap.data() == undefined) {
+            console.log(1)
+            this.createUserInfo(
+              docRef,
+              res[0],
+              this.token,
+              this.createtime,
+              this.expiretime
+            );
+            // this.$message.success("登录成功");
+            this.show = false;
+          } else {
+            console.log(docSnap.data())
+            if (
+              docSnap.data().expiretime < new Date() ||
+              docSnap.data().token !== this.$cookie.get("token") ||
+              docSnap.data().expiretime != this.$cookie.get("expires")
+            ) {
+              this.show = true;
+            } else {
+              this.show = false;
+            }
+          }
+        });
+      } else {
+        alert("请安装MetaMask钱包");
+        this.show = true;
+      }
   },
   methods: {
     // 点击登录打开弹窗
@@ -98,12 +137,14 @@ export default {
       this.centerDialogVisible = false;
       if (window.ethereum) {
         window.ethereum.enable().then(async (res) => {
+          // alert('当前钱包地址：'+res[0])
           this.loginService(res[0]);
           const db = getFirestore();
           const docRef = doc(db, "user", res[0]);
           const docSnap = await getDoc(docRef);
           if (docSnap.data() == undefined) {
-            createUserInfo(
+            console.log(1)
+            this.createUserInfo(
               docRef,
               res[0],
               this.token,
@@ -113,6 +154,7 @@ export default {
             this.$message.success("登录成功");
             this.show = false;
           } else {
+            console.log(docSnap.data())
             if (
               docSnap.data().expiretime < new Date() ||
               docSnap.data().token !== this.$cookie.get("token") ||
