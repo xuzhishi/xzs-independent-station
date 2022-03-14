@@ -72,9 +72,6 @@ export default {
 }
 .logo-image {
   margin-top: -15px;
-}
-.logo-image {
-  margin-top: -15px;
   background: rgba(0,0,0,0);
 }
 ::v-deep .el-menu--horizontal>.el-menu-item:not(.is-disabled):focus, .el-menu--horizontal>.el-menu-item:not(.is-disabled):hover, .el-menu--horizontal>.el-submenu .el-submenu__title:hover{
