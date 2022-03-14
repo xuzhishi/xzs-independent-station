@@ -58,6 +58,7 @@ export default {
 ::v-deep.el-menu.el-menu--horizontal {
   border-bottom: none;
   margin-top: 20px;
+  background: rgba(0,0,0,0);
 }
 ::v-deep.el-menu--horizontal > .el-menu-item.is-active {
   border-bottom: none;
@@ -71,6 +72,13 @@ export default {
 }
 .logo-image {
   margin-top: -15px;
+}
+.logo-image {
+  margin-top: -15px;
+  background: rgba(0,0,0,0);
+}
+::v-deep .el-menu--horizontal>.el-menu-item:not(.is-disabled):focus, .el-menu--horizontal>.el-menu-item:not(.is-disabled):hover, .el-menu--horizontal>.el-submenu .el-submenu__title:hover{
+   background: rgba(0,0,0,0);
 }
 </style>
 
