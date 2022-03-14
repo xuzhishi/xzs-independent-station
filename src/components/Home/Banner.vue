@@ -193,7 +193,7 @@ export default {
 .banner {
   width: 100%;
   height: 828px;
-  background: url("./../../assets/image/banner.jpg");
+  background: url("./../../assets/image/home__banner__new.jpg");
   background-size: 100% 908px;
   overflow: hidden;
   display: flex;
