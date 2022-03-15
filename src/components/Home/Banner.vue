@@ -6,8 +6,8 @@ div
         .title XDTX Metaverse
         .subTitle {{ $t('home.bannerTitle') }}
         .btn(@click="learnMoreClick") {{ $t('home.bannerBth') }}
-      .banner-right
-        img.right-img(src="./../../assets/image/banner__img.png")
+      //- .banner-right
+      //-   img.right-img(src="./../../assets/image/banner__img.png")
   .listen-voice
     .listen-left
       .left-content {{ $t('home.listenTitle') }}
