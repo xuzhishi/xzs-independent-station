@@ -3,10 +3,11 @@ div
   .personInfo
     //-  v-show="show"
     span.login(@click="loginClick", v-show="show") 登录
-    img.person-logo(:src="accountImg")
+    //- img.person-logo(:src="accountImg")
   logo-dialog(
     :centerDialogVisible="centerDialogVisible",
     @confirmHandleClick="confirmHandleClick",
+    @handleCloseClick="handleCloseClick"
   )
   //- #demo 11
     vue-metamask(userMessage="msg", @onComplete="onComplete") 
@@ -43,44 +44,48 @@ export default {
   },
   mounted() {
     this.centerDialogVisible = false;
-      if (window.ethereum) {
-        window.ethereum.enable().then(async (res) => {
-          // alert('当前钱包地址：'+res[0])
-          this.loginService(res[0]);
-          const db = getFirestore();
-          const docRef = doc(db, "user", res[0]);
-          const docSnap = await getDoc(docRef);
-          if (docSnap.data() == undefined) {
-            this.createUserInfo(
-              docRef,
-              res[0],
-              this.token,
-              this.createtime,
-              this.expiretime
-            );
-            // this.$message.success("登录成功");
-            this.show = false;
+    if (window.ethereum) {
+      window.ethereum.enable().then(async (res) => {
+        // alert('当前钱包地址：'+res[0])
+        this.loginService(res[0]);
+        const db = getFirestore();
+        const docRef = doc(db, "user", res[0]);
+        const docSnap = await getDoc(docRef);
+        if (docSnap.data() == undefined) {
+          this.createUserInfo(
+            docRef,
+            res[0],
+            this.token,
+            this.createtime,
+            this.expiretime
+          );
+          // this.$message.success("登录成功");
+          this.show = false;
+        } else {
+          if (
+            docSnap.data().expiretime < new Date() ||
+            docSnap.data().token !== this.$cookie.get("token") ||
+            docSnap.data().expiretime != this.$cookie.get("expires")
+          ) {
+            this.show = true;
           } else {
-            if (
-              docSnap.data().expiretime < new Date() ||
-              docSnap.data().token !== this.$cookie.get("token") ||
-              docSnap.data().expiretime != this.$cookie.get("expires")
-            ) {
-              this.show = true;
-            } else {
-              this.show = false;
-            }
+            this.show = false;
           }
-        });
-      } else {
-        alert("请安装MetaMask钱包");
-        this.show = true;
-      }
+        }
+      });
+    } else {
+      alert("请安装MetaMask钱包");
+      this.show = true;
+    }
   },
   methods: {
     // 点击登录打开弹窗
     loginClick() {
       this.centerDialogVisible = true;
+    },
+    // 关闭弹窗
+    handleCloseClick() {
+      this.centerDialogVisible = false;
     },
     // 更新数据库
     async updateUserInfo(docRef, token, expiretime) {
@@ -175,6 +180,8 @@ export default {
     align-items: center;
     color: #393837;
     cursor: pointer;
+    margin-left: 100px;
+    margin-top: 10px;
   }
   .person-logo {
     position: relative;

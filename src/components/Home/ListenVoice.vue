@@ -1,155 +1,125 @@
 <template lang="pug">
 div
-  .banner
-    .block
-      span.demonstration 
-        el-carousel(
-          trigger="click",
-          height="150px",
-          arrow="always",
-          :autoplay="false"
-        )
-          el-carousel-item(v-for="item in 2", :key="item")
-            .banner-left
-              .title XDTX Metaverse
-              .subTitle {{ $t('home.bannerTitle') }}
-              .btn(@click="learnMoreClick") {{ $t('home.bannerBth') }}
-    .technical-introduction
-      dl(v-for="item in bannerContent")
-        dt
-          img(:src="item.imgUrl")
-        dd
-          h5 {{ item.title }}
-          p {{ item.content }}
-
-  //- .listen-voice
-    .listen-left
-      .left-content {{ $t('home.listenTitle') }}
-      .left-image 
+  .listen
+    .listen-voice
+      .listen-left
+        .left-title
+          span.line
+          span.listen 倾听
+        .left-subTitle
+          h5 找到你的医生
+          h4 心灵的声音
+        .left-content
+          .content(v-for="item in listenContent")
+            p(v-html="item")
+        .btn(@click="dialogFormVisible = true") {{ $t('home.listen__btn') }}
+      .listen-right
         img(src="./../../assets/image/listen.gif")
-    .listen-right
-      p.right-content {{ $t('home.listen__content1') }}
-      p.right-content {{ $t('home.listen__content2') }}
-      p.right-content {{ $t('home.listen__content3') }}
-      p.right-content {{ $t('home.listen__content4') }}
-      p.right-content {{ $t('home.listen__content5') }}
-      .btn(@click="dialogFormVisible = true") {{ $t('home.listen__btn') }}
-  //- el-dialog(title="Make an appointment", :visible.sync="dialogFormVisible")
-    el-form(:model="form", :rules="rules", ref="form")
-      el-form-item(label="Name", :label-width="formLabelWidth", prop="name")
-        el-input(
-          v-model="form.name",
-          autocomplete="off",
-          placeholder="Please enter your name"
+    el-dialog(title="Make an appointment", :visible.sync="dialogFormVisible")
+      el-form(:model="form", :rules="rules", ref="form")
+        el-form-item(label="Name", :label-width="formLabelWidth", prop="name")
+          el-input(
+            v-model="form.name",
+            autocomplete="off",
+            placeholder="Please enter your name"
+          )
+        el-form-item(
+          label="Email",
+          :label-width="formLabelWidth",
+          prop="email"
         )
-      el-form-item(label="Email", :label-width="formLabelWidth", prop="email")
-        el-input(
-          v-model="form.email",
-          autocomplete="off",
-          placeholder="Please enter your email address",
-          @blur="sendEmail"
+          el-input(
+            v-model="form.email",
+            autocomplete="off",
+            placeholder="Please enter your email address",
+            @blur="sendEmail"
+          )
+        el-form-item(label="Time", :label-width="formLabelWidth", prop="time")
+          el-date-picker(
+            v-model="form.time",
+            type="date",
+            placeholder="Please select a date",
+            :picker-options="pickerOptions"
+          )
+        el-form-item(
+          label="Concern",
+          :label-width="formLabelWidth",
+          prop="textarea"
         )
-      el-form-item(label="Time", :label-width="formLabelWidth", prop="time")
-        el-date-picker(
-          v-model="form.time",
-          type="date",
-          placeholder="Please select a date",
-          :picker-options="pickerOptions"
-        )
-      el-form-item(
-        label="Concern",
-        :label-width="formLabelWidth",
-        prop="textarea"
-      )
-        el-input(
-          type="textarea",
-          :rows="2",
-          placeholder="Please briefly describe your concern",
-          v-model="form.textarea"
-        )
-      el-form-item(label="Detail", :label-width="formLabelWidth") 
-        el-input(
-          type="textarea",
-          :rows="2",
-          placeholder="Please describe your concern in detail",
-          v-model="form.textarea1"
-        )
-    .dialog-footer(slot="footer")
-      el-button(@click="dialogFormVisible = false") Cancel
-      el-button(type="primary", @click="submitForm('form')") Confirm
+          el-input(
+            type="textarea",
+            :rows="2",
+            placeholder="Please briefly describe your concern",
+            v-model="form.textarea"
+          )
+        el-form-item(label="Detail", :label-width="formLabelWidth") 
+          el-input(
+            type="textarea",
+            :rows="2",
+            placeholder="Please describe your concern in detail",
+            v-model="form.textarea1"
+          )
+        .dialog-footer(slot="footer")
+        el-button(@click="dialogFormVisible = false") Cancel
+        el-button(type="primary", @click="submitForm('form')") Confirm
 </template>
 
 <script>
 import { getFirestore, addDoc, collection } from "firebase/firestore";
-
 export default {
-  // data() {
-  //   return {
-  //     dialogFormVisible: false,
-  //     form: {
-  //       name: "",
-  //       email: "",
-  //       time: "",
-  //       textarea: "",
-  //       textarea1: "",
-  //     },
-  //     formLabelWidth: "100px",
-  //     pickerOptions: {
-  //       disabledDate(time) {
-  //         return time.getTime() < Date.now();
-  //       },
-  //     },
-  //     rules: {
-  //       name: [
-  //         {
-  //           required: true,
-  //           message: "Please enter your name",
-  //           trigger: "blur",
-  //         },
-  //       ],
-  //       email: [
-  //         {
-  //           required: true,
-  //           message: "Please enter your email address",
-  //           trigger: "blur",
-  //         },
-  //       ],
-  //       time: [
-  //         {
-  //           required: true,
-  //           message: "Please select intended appointment time",
-  //           trigger: "change",
-  //         },
-  //       ],
-  //       textarea: [
-  //         {
-  //           required: true,
-  //           message: "Please write about your concerns in detail",
-  //           trigger: "blur",
-  //         },
-  //       ],
-  //     },
-  //   };
-  // },
+  data() {
+    return {
+      dialogFormVisible: false,
+      form: {
+        name: "",
+        email: "",
+        time: "",
+        textarea: "",
+        textarea1: "",
+      },
+      formLabelWidth: "100px",
+      pickerOptions: {
+        disabledDate(time) {
+          return time.getTime() < Date.now();
+        },
+      },
+      rules: {
+        name: [
+          {
+            required: true,
+            message: "Please enter your name",
+            trigger: "blur",
+          },
+        ],
+        email: [
+          {
+            required: true,
+            message: "Please enter your email address",
+            trigger: "blur",
+          },
+        ],
+        time: [
+          {
+            required: true,
+            message: "Please select intended appointment time",
+            trigger: "change",
+          },
+        ],
+        textarea: [
+          {
+            required: true,
+            message: "Please write about your concerns in detail",
+            trigger: "blur",
+          },
+        ],
+      },
+    };
+  },
   computed: {
-    bannerContent() {
+    listenContent() {
       return [
-        {
-          imgUrl: "",
-          title: "WEB3.0",
-          content: "为患者线上就诊涉及到的 隐私安全提供了强力保障",
-        },
-        {
-          imgUrl: "",
-          title: "XR技术",
-          content:
-            "突破次元壁，将医院的空间容量无限扩容 每位患者居家即可完成分诊、候诊和治疗",
-        },
-        {
-          imgUrl: "",
-          title: "远程在线",
-          content: "我们将在全球范围内招募 有从医资格的医师进行线上坐诊",
-        },
+        "海拉医院为全球的患者提供平等就医的机会。<br /> 在Web3.0+XR技术的医疗服务体系上，所有人都是一个匿名实体，<br /> 所有人都将一视同仁，提供最普惠的医疗帮助。",
+        "在预约医生成功后请前往元宇宙海拉医院。<br /> 你可以在元宇宙世界与医生面对面交谈。",
       ];
     },
   },
@@ -208,122 +178,131 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-::v-deep .banner {
+.listen {
   width: 100%;
-  height: 828px;
-  background: url("./../../assets/image/home__banner__new.jpg");
-  background-size: 100% 968px;
-  overflow: hidden;
-  margin-top: -80px;
-  .el-carousel--horizontal {
-    width: 1108px;
-    height: 200px;
-    background-color: rgba(0, 0, 0, 0);
-    margin-top: 310px;
-    margin-left: 359px;
-    .el-carousel__indicators--horizontal {
-      display: none;
-    }
-    .el-carousel__arrow--left,
-    .el-carousel__arrow--right {
-      margin-top: 36px;
-    }
-    .el-carousel__item:nth-child(2n) {
-      background-color: rgba(0, 0, 0, 0);
-      height: 200px;
-    }
-    .el-carousel__item:nth-child(2n + 1) {
-      background-color: rgba(0, 0, 0, 0);
-      height: 200px;
-    }
-    .el-carousel__item {
-      .banner-left {
-        text-align: left;
-        // margin-top: 260px;
-        margin-left: 100px;
-        .title {
-          font-family: Arial;
-          font-weight: bold;
-          font-size: 48px;
-          line-height: 55px;
-          color: #393837;
-        }
-        .subTitle {
-          font-family: Microsoft YaHei UI;
-          font-weight: bold;
-          font-size: 20px;
-          line-height: 25px;
-          display: flex;
-          align-items: center;
-          text-transform: uppercase;
-          color: #393837;
-        }
-        .btn {
-          width: 122px;
-          height: 37px;
-          background: #4e9cf8;
-          border-radius: 5px;
-          font-family: Microsoft YaHei UI;
-          font-weight: bold;
-          font-size: 16px;
-          line-height: 20px;
-          color: #ffffff;
-          text-align: center;
-          line-height: 37px;
-          margin-top: 65px;
-          cursor: pointer;
-        }
-      }
-    }
-  }
-  .technical-introduction {
-    width: 1198px;
-    height: 305px;
-    background: #ffffff;
-    margin-top: 13px;
+  height: 759px;
+  background: linear-gradient(
+    180deg,
+    rgba(196, 196, 196, 0.1501) 0%,
+    rgba(226, 226, 226, 0.170673) 7.59%,
+    rgba(255, 255, 255, 0.19) 33.14%
+  );
+  .listen-voice {
+    width: 1100px;
+    height: 556px;
+    margin: 0 auto;
     display: flex;
-    box-sizing: border-box;
-    padding-left: 420px;
-    dl {
-      width: 216px;
-      height: 200px;
-      background-color: #fff;
-      margin-right: 20px;
-      margin-top: 50px;
-      dt {
-        width: 97px;
-        height: 72px;
-        background: #c4c4c4;
-        margin: 0 auto;
+    justify-content: space-between;
+    .listen-left {
+      .left-title {
+        width: 475px;
+        // margin-left: 176px;
+        margin-top: 150px;
+        text-align: left;
+        .line {
+          display: inline-block;
+          width: 224px;
+          height: 2px;
+          background: #7a7a7a;
+        }
+        .listen {
+          font-family: "Microsoft YaHei UI";
+          font-weight: 700;
+          font-size: 48px;
+          line-height: 61px;
+          color: #4e9cf8;
+          position: relative;
+          top: 10px;
+          left: 15px;
+        }
       }
-      dd {
-        margin-top: 27px;
-        text-align: center;
+      .left-subTitle {
+        display: flex;
+        justify-content: space-between;
+        width: 477px;
+        margin-top: 20px;
+        // margin-left: 176px;
+        margin-bottom: 26px;
         h5 {
           font-family: "Microsoft YaHei UI";
           font-weight: 700;
-          font-size: 14px;
-          line-height: 18px;
-          text-align: center;
+          font-size: 18px;
+          line-height: 23px;
           color: #393837;
-          margin-bottom: 30px;
+          margin-top: 24px;
         }
-        p {
+        h4 {
           font-family: "Microsoft YaHei UI";
-          font-size: 12px;
-          line-height: 18px;
-          text-align: center;
-          color: #393837;
-          margin: 0 auto;
+          font-weight: 700;
+          font-size: 48px;
+          line-height: 61px;
+          color: #4e9cf8;
         }
       }
+      .left-content {
+        width: 475px;
+        height: 200px;
+        // margin-left: 176px;
+        .content {
+          font-family: "Microsoft YaHei UI";
+          font-weight: 400;
+          font-size: 16px;
+          line-height: 22px;
+          color: #393837;
+          margin-bottom: 30px;
+          text-align: left;
+        }
+      }
+      .btn {
+        width: 400px;
+        height: 37px;
+        background: #4e9cf8;
+        border-radius: 5px;
+        font-family: Microsoft YaHei UI;
+        font-weight: bold;
+        font-size: 16px;
+        line-height: 20px;
+        color: #ffffff;
+        text-align: center;
+        line-height: 37px;
+        margin-top: 37px;
+        cursor: pointer;
+        // margin-left: 176px;
+      }
     }
-    dl:nth-of-type(1) p {
-      width: 140px;
+    .listen-right {
+      width: 472px;
+      height: 421px;
+      background: url("./../../assets/image/listen__banner__new.jpg");
+      background-size: 100% 421px;
+      margin-top: 150px;
+      position: relative;
+      img {
+        width: 400px;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+      }
     }
-    dl:nth-of-type(3) p {
-      width: 158px;
-    }
+  }
+}
+::v-deep .el-dialog {
+  width: 32%;
+  .el-input__inner {
+    width: 94%;
+    margin-left: -29px;
+  }
+  .el-textarea__inner {
+    width: 94%;
+  }
+  .el-date-editor.el-input,
+  .el-date-editor.el-input__inner {
+    width: 100%;
+    margin-left: 29px;
+  }
+  .el-input__icon {
+    margin-left: -29px;
   }
 }
 </style>

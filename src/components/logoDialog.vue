@@ -4,8 +4,9 @@ div
     title="Connect Your Wallet",
     :visible.sync="centerDialogVisible",
     width="30%",
-    center
-    :close-on-click-modal="false"
+    center,
+    :close-on-click-modal="false",
+    :before-close="handleClose"
   )
     img(src="./../assets/image/logo-dialog.png", width="195")
     //- el-radio-group(v-model="identity")
@@ -20,9 +21,9 @@ div
 <script>
 export default {
   props: {
-    centerDialogVisible:{
-      type:Boolean
-    }
+    centerDialogVisible: {
+      type: Boolean,
+    },
   },
   data() {
     return {
@@ -33,6 +34,9 @@ export default {
     confirmClick() {
       this.$emit("confirmHandleClick");
       // console.log(this.identity)
+    },
+    handleClose() {
+      this.$emit("handleCloseClick");
     },
   },
 };
@@ -55,9 +59,6 @@ export default {
     line-height: 25px;
     color: #7a7a7a;
     margin-top: 10px;
-  }
-  .el-dialog__headerbtn .el-dialog__close {
-    display: none;
   }
   .el-dialog__body {
     display: flex;

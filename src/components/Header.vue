@@ -27,11 +27,8 @@ export default {
   width: 1200px;
   display: flex;
   justify-content: space-around;
-  background: rgba(0,0,0,0);
-  position: absolute;
-  // z-index: 999;
-  left: 50%;
-  top:0;
-  transform: translateX(-50%);
+  background: rgba(0, 0, 0, 0);
+  margin: 0 auto;
+  position: relative;
 }
 </style>

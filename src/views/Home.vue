@@ -1,6 +1,7 @@
 <template lang='pug'>
 div
   banner
+  listenVoice
   newDynamic
 </template>
 
@@ -10,6 +11,7 @@ export default {
   components: {
     banner: () => import("@/components/Home/Banner.vue"),
     newDynamic: () => import("@/components/Home/NewDynamic.vue"),
+    listenVoice: () => import("@/components/Home/ListenVoice.vue"),
   },
 };
 </script>
