@@ -29,7 +29,7 @@ export default {
   justify-content: space-around;
   background: rgba(0,0,0,0);
   position: absolute;
-  z-index: 2;
+  // z-index: 999;
   left: 50%;
   top:0;
   transform: translateX(-50%);

@@ -201,7 +201,8 @@ export default {
     width: 1200px;
     margin: 0 auto;
     // background: pink;
-    position: relative;
+    // position:absolute;
+    // z-index: -1;s
     .banner-left {
       text-align: left;
       margin-top: 260px;

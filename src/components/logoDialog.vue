@@ -71,7 +71,6 @@ export default {
   .el-button {
     width: 296px;
     height: 44px;
-
     background: #56a4cb;
     border-radius: 5px;
   }
