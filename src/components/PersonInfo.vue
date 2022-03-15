@@ -42,29 +42,6 @@ export default {
     };
   },
   mounted() {
-    // if (window.ethereum) {
-    //   window.ethereum.enable().then(async (res) => {
-    //     console.log(res[0])
-    //     this.loginService(res[0])
-    //     const db = getFirestore();
-    //     const docRef = doc(db, "user", res[0]);
-    //     const docSnap = await getDoc(docRef);
-    //     console.log(docSnap.data())
-    //     if (
-    //       docSnap.data().expiretime < new Date() ||
-    //       docSnap.data().token !== this.$cookie.get("token") ||
-    //       docSnap.data().expiretime != this.$cookie.get("expires")
-    //     ) {
-    //       this.show = true;
-    //     } else {
-    //       this.show = false;
-    //     }
-    //   });
-    // } else {
-    //   alert("请安装MetaMask钱包");
-    //   this.show = true;
-    // }
-
     this.centerDialogVisible = false;
       if (window.ethereum) {
         window.ethereum.enable().then(async (res) => {
@@ -74,7 +51,6 @@ export default {
           const docRef = doc(db, "user", res[0]);
           const docSnap = await getDoc(docRef);
           if (docSnap.data() == undefined) {
-            console.log(1)
             this.createUserInfo(
               docRef,
               res[0],
@@ -85,7 +61,6 @@ export default {
             // this.$message.success("登录成功");
             this.show = false;
           } else {
-            console.log(docSnap.data())
             if (
               docSnap.data().expiretime < new Date() ||
               docSnap.data().token !== this.$cookie.get("token") ||
@@ -143,7 +118,6 @@ export default {
           const docRef = doc(db, "user", res[0]);
           const docSnap = await getDoc(docRef);
           if (docSnap.data() == undefined) {
-            console.log(1)
             this.createUserInfo(
               docRef,
               res[0],
@@ -154,7 +128,6 @@ export default {
             this.$message.success("登录成功");
             this.show = false;
           } else {
-            console.log(docSnap.data())
             if (
               docSnap.data().expiretime < new Date() ||
               docSnap.data().token !== this.$cookie.get("token") ||

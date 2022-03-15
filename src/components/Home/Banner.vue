@@ -197,8 +197,6 @@ export default {
   background-size: 100% 908px;
   overflow: hidden;
   display: flex;
-  position: relative;
-  top: -10px;
   .banner-wrap {
     width: 1200px;
     margin: 0 auto;
