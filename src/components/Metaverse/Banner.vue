@@ -1,8 +1,11 @@
 <template lang="pug">
 div
-  h2 XDTX Metaverse
+  //- h2 XDTX Metaverse
   .banner
-    a.link(href="https://hello.vrchat.com/", target="_blank") {{ $t('Metaverse.banner__link') }}
+    .banner__title
+      h4.title1 XDTX Metaverse
+      h4.title  实现全球普惠医疗
+      h4.title  帮助人类拓展生命的维度
 </template>
 
 <script>
@@ -10,19 +13,11 @@ export default {};
 </script>
 
 <style lang="scss" scoped>
-h2 {
-  font-family: Arial;
-  font-size: 48px;
-  line-height: 55px;
-  color: #393837;
-  margin-top: 30px;
-}
 .banner {
   width: 1199px;
   height: 518px;
   background: url("./../../assets/image/Mateverse__banner.jpg");
   margin: 0 auto;
-  margin-top: 30px;
   background-size: 1199px 518px;
   position: relative;
   .link {
