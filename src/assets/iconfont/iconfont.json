@@ -6,6 +6,41 @@
   "description": "",
   "glyphs": [
     {
+      "icon_id": "705695",
+      "name": "眼睛",
+      "font_class": "yanjing",
+      "unicode": "e62b",
+      "unicode_decimal": 58923
+    },
+    {
+      "icon_id": "3874052",
+      "name": "消息",
+      "font_class": "xiaoxi",
+      "unicode": "e63a",
+      "unicode_decimal": 58938
+    },
+    {
+      "icon_id": "5360137",
+      "name": "消息",
+      "font_class": "xiaoxi1",
+      "unicode": "e62f",
+      "unicode_decimal": 58927
+    },
+    {
+      "icon_id": "6268296",
+      "name": "消息",
+      "font_class": "xiaoxi2",
+      "unicode": "e640",
+      "unicode_decimal": 58944
+    },
+    {
+      "icon_id": "2077545",
+      "name": "向上_箭头",
+      "font_class": "xiangshang_jiantou",
+      "unicode": "e63f",
+      "unicode_decimal": 58943
+    },
+    {
       "icon_id": "1261596",
       "name": "facebook",
       "font_class": "facebook",
