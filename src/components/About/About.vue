@@ -9,14 +9,14 @@ div
       h5 {{ $t('About.doctor_describe_title') }}
       .right-block
         img(
-          src="./../../assets/image/doctor__1.png",
+          src="./../../assets/image/pic.jpg",
           width="179",
           height="232"
         )
         .right-content
           p.title {{ $t('About.doctor_subTitle_1') }}
-          p.content {{ $t('About.doctor_content_1') }}
-      .right-block 
+          p.content(v-html="$t('About.doctor_content_1')")
+      //- .right-block 
         img(
           src="./../../assets/image/doctor__2.png",
           width="179",
@@ -66,7 +66,6 @@ export default {};
   }
   .about-right {
     width: 499px;
-    // height: 613px;
     background: #eeedeb;
     margin-top: 72px;
     h5 {
