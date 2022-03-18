@@ -1,179 +1,138 @@
 <template lang="pug">
 div
-  .wrap
-    h4 {{ $t('Recruitment.content_title') }}
-    .content
-      .content-recruitment(v-for="(item, index) in list", :key="index")
-        .content-list
-          img(:src="item.img")
-        .subTitle
-          h5 {{ item.subTitle }}
-        .list-content
-          p {{ item.content }}
-          p(style="margin-top: 20px") {{ item.content1 }}
-          p {{ item.content2 }}
-          .content3
-            .content3-recruitment(
-              v-for="(item, index) in item.content3",
-              :key="index"
-            )
-              h5 {{ item.subTitle }}
-              p {{ item.content }}
-              p {{ item.content1 }}
-    //-   h5 {{ item.subTitle }}
-    //-   p(style="margin-bottom: 20px") {{ item.content }}
-    //-   p {{ item.content1 }}
-    //-   p {{ item.content2 }}
-  h5.link {{ $t('Recruitment.content_bottom_1') }}<span style="color:#56A4CB;font-weight:bold;">contact@xdtx.org</span>{{ $t('Recruitment.content_bottom_2') }}
+  .recruitment
+    h2 招募成员架构
+    .block
+      img(src="./../../assets/image/member.jpg")
+      .block-right
+        .small-block(v-for="item in memberList")
+          h4 {{ item.title }}
+          p {{ item.subTitle }}
+          .arrow
+          img(src="./../../assets/image/member-right.png")
 </template>
 
 <script>
 export default {
-  computed: {
-    list() {
-      return [
+  data() {
+    return {
+      memberList: [
         {
-          img: require("./../../assets/image/recruitment0.png"),
-          subTitle: this.$t("Recruitment.content_subTitle_1"),
-          content: this.$t("Recruitment.content_content_1"),
+          title: "国际专业类人员",
+          subTitle:
+            "我们在国际上招聘的工作人员在世界各地担任卫生技术、业务、管理和领导职务。他们具有流动性，并根据他们的专长和元宇宙医院的规划需要受雇开展工作。",
         },
         {
-          img: require("./../../assets/image/recruitment1.png"),
-          subTitle: this.$t("Recruitment.content_subTitle_2"),
-          content: this.$t("Recruitment.content_content_2"),
+          title: "一般事务类人员",
+          subTitle:
+            "我们的规划和专业人员由当地居民或国民提供支持，这些人受雇形成一般事务类人员类别。他们对于我们的成功至关重要，具有范围广泛的技能，并且受到我们整个组织各个团队的重视。",
         },
         {
-          img: require("./../../assets/image/recruitment2.png"),
-          subTitle: this.$t("Recruitment.content_subTitle_3"),
-          content: this.$t("Recruitment.content_content_3"),
-          content1: this.$t("Recruitment.content_content1_3"),
+          title: "顾问及其它合同安排",
+          subTitle:
+            "元宇宙医院与主题事项专家签订合同，由他们提供时间有限、针对特定项目的专业水平支持，以实现具体规划的可交付成果。这些合同不是雇用合同，不属于元宇宙医院《职员细则》和《人事条例》的...",
         },
         {
-          img: require("./../../assets/image/recruitment3.png"),
-          subTitle: this.$t("Recruitment.content_subTitle_4"),
-          content: this.$t("Recruitment.content_content_4"),
-          content1: this.$t("Recruitment.content_content1_4"),
+          title: "初级专业干事规划",
+          subTitle:
+            "初级专业干事（JPO）规划使年轻专业人员能够在职业生涯的早期阶段获得多边技术合作的实践经验。元宇宙医院组织欢迎初级专业干事参加国家办事处、区域办事处和总部卫生技术和行政领域的工作。",
         },
         {
-          img: require("./../../assets/image/recruitment4.png"),
-          subTitle: this.$t("Recruitment.content_subTitle_5"),
-          content: this.$t("Recruitment.content_content_5"),
+          title: "申请成为初级专业干事",
+          subTitle:
+            "元宇宙医院组织实习生规划，面向未来的公共卫生领导者。为了推进全球卫生目标，每个卫生系统必须有一支有能力和活力的卫生人力队伍作为其核心。各国需要一批训练有素、熟悉卫生部门各系统和流...",
         },
         {
-          img: require("./../../assets/image/recruitment5.png"),
-          subTitle: this.$t("Recruitment.content_subTitle_6"),
-          content: this.$t("Recruitment.content_content_6"),
-          content1: this.$t("Recruitment.content_content1_6"),
-          content2: this.$t("Recruitment.content_content2_1"),
-          content3: [
-            {
-              subTitle: this.$t("Recruitment.content_subTitle_7"),
-              content: this.$t("Recruitment.content_content_7"),
-            },
-            {
-              subTitle: this.$t("Recruitment.content_subTitle_8"),
-              content: this.$t("Recruitment.content_content_8"),
-              content1: this.$t("Recruitment.content_content1_8"),
-            },
-          ],
+          title: "全球的医师招募条件",
+          subTitle:
+            "1、接受过Medical education in the United States系统训练，拥有国际医学教育学位而且取得在各州执业许可的人员（包括经过美国医师执照考试（USMLE）合格者）...",
         },
-      ];
-    },
+      ],
+    };
   },
 };
 </script>
 
 <style lang="scss" scoped>
-.wrap {
-  width: 1199px;
-  margin: 0 auto;
-  text-align: left;
-  margin-top: 30px;
-  padding-bottom: 30px;
-  h4 {
-    font-family: Microsoft YaHei UI;
-    font-size: 18px;
-    line-height: 20px;
-    color: #393837;
-    margin-top: 82px;
-    margin-bottom: 59px;
+.recruitment {
+  width: 100%;
+  height: 963px;
+  background-color: rgba(196, 196, 196, 0.3);
+  overflow: hidden;
+  h2 {
+    font-family: "Microsoft YaHei UI";
+    font-weight: 400;
+    font-size: 48px;
     text-align: center;
+    color: #393837;
+    margin-top: 52px;
   }
-  .content {
-    margin-left: 20px;
+  .block {
+    width: 1200px;
     display: flex;
-    justify-content: space-between;
-    flex-wrap: wrap;
-    height: 700px;
-    .content-recruitment {
-      width: 360px;
-      // height: 224px;
-      position: relative;
-      .content-list {
-        width: 360px;
-        height: 224px;
-        background: #eeedeb;
-        text-align: center;
-        cursor: pointer;
-        img {
-          margin-top: 50px;
-        }
+    margin: 0 auto;
+    margin-top: 112px;
+    .block-right {
+      height: 456px;
+      width: 692px;
+      margin-left: 32px;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      .small-block:nth-of-type(1) {
+        margin-bottom: 10px;
       }
-      .subTitle {
-        h5 {
-          color: #393837;
-          font-family: Microsoft YaHei UI;
-          font-size: 16px;
-          margin: 20px 0;
-        }
-      }
-
-      .list-content {
-        width: 360px;
-        background: #fff;
-        position: absolute;
-        top: 290px;
-        // left: -20px;
-        display: none;
-        z-index: 30;
-        box-shadow: 0px 10px 8px #888888;
+      .small-block:nth-of-type(6) {
+        background-color: #4e9cf8;
+        position: relative;
+        h4,
         p {
-          font-family: Microsoft YaHei UI;
-          font-size: 12px;
-          line-height: 20px;
-          color: #393837;
-          width: 340px;
-          margin: 0 auto;
-          margin-top: 10px;
+          color: #fff;
         }
-        .content3 {
-          .content3-recruitment {
-            h5 {
-              margin-left: 10px;
-            }
-          }
+        img {
+          display: none;
+        }
+        .arrow {
+          width: 9px;
+          height: 15px;
+          background: url("./../../assets/image/member-right-last.png");
+          position: absolute;
+          bottom: 10px;
+          right: 21px;
+          cursor: pointer;
+        }
+      }
+      .small-block {
+        width: 224px;
+        height: 224px;
+        background: #fff;
+        border-radius: 15px;
+        text-align: left;
+        box-sizing: border-box;
+        padding: 0 21px;
+        position: relative;
+        h4 {
+          font-family: "Microsoft YaHei UI";
+          font-weight: 700;
+          font-size: 16px;
+          color: #393837;
+          margin: 27px 0 15px 0;
+        }
+        p {
+          font-family: "Microsoft YaHei UI";
+          font-weight: 400;
+          font-size: 14px;
+          line-height: 18px;
+          color: #393837;
+        }
+        img {
+          position: absolute;
+          bottom: 10px;
+          right: 21px;
+          cursor: pointer;
         }
       }
     }
-    .content-recruitment:hover .list-content {
-      display: block;
-    }
-    .content-recruitment:hover {
-      width: 360;
-      box-shadow: 0px 0px 8px #888888;
-    }
   }
-  .content:nth-of-type(6),
-  .content:nth-of-type(8) {
-    p {
-      margin-bottom: 0 !important;
-    }
-  }
-}
-.link {
-  font-size: 18px;
-  width: 845px;
-  margin: 0 auto;
-  line-height: 24px;
 }
 </style>

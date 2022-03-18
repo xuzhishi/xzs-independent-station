@@ -48,7 +48,7 @@ export default {
   width: 1000px;
   text-align: left;
   margin: 0 auto;
-  margin-top: 170px;
+  margin-top: 100px;
   position: relative;
   margin-bottom: 190px;
   .left-1 {
