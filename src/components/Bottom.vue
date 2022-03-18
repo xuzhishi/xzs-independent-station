@@ -43,7 +43,7 @@ export default {
 
 <style lang="scss" scoped>
 .line {
-  width: 1200px;
+  width: 100%;
   height: 2px;
   background-color: #7a7a7a;
   margin: 0 auto;
@@ -53,8 +53,10 @@ export default {
   display: flex;
   margin: 0 auto;
   margin-bottom: 116px;
-  width: 1200px;
+  width: 100%;
   justify-content: space-between;
+  box-sizing: border-box;
+  padding: 0 50px;
   ul {
     text-align: left;
     margin-top: 57px;

@@ -76,6 +76,7 @@ export default {
   height: 685px;
   background: rgba(196, 196, 196, 0.3);
   position: relative;
+  margin-bottom: 100px;
   .developments-center {
     width: 1100px;
     position: absolute;

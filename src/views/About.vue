@@ -1,12 +1,16 @@
 <template lang="pug">
 div
-  about
+  banner
+  digitalMedical
+  product
 </template>
 
 <script>
 export default {
   components: {
-    about: () => import("@/components/About/About.vue"),
+    banner: () => import("@/components/About/Banner.vue"),
+    digitalMedical: () => import("@/components/About/DigitalMedical.vue"),
+    product: () => import("@/components/About/Product.vue"),
   },
 };
 </script>
