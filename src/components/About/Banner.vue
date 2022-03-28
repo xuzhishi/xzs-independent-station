@@ -18,13 +18,16 @@ export default {};
   background-color: #fff;
   overflow: hidden;
   h2 {
+    width: 1212px;
     font-family: "Microsoft YaHei UI";
     font-weight: 700;
     font-size: 48px;
     color: #393837;
+    margin: 0 auto;
     margin-top: 160px;
     text-align: left;
-    margin-left: 435px;
+    box-sizing: border-box;
+    padding-left: 87px;
   }
   .block {
     width: 1212px;

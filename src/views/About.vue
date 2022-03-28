@@ -3,6 +3,7 @@ div
   banner
   digitalMedical
   product
+  doctorIntroduction
 </template>
 
 <script>
@@ -11,6 +12,7 @@ export default {
     banner: () => import("@/components/About/Banner.vue"),
     digitalMedical: () => import("@/components/About/DigitalMedical.vue"),
     product: () => import("@/components/About/Product.vue"),
+    doctorIntroduction:()=>import("@/components/About/DoctorIntroduction.vue")
   },
 };
 </script>

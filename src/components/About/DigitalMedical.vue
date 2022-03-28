@@ -31,7 +31,7 @@ export default {
   background-color: #ededed;
   overflow: hidden;
   box-sizing: border-box;
-  padding-left: 435px;
+  padding-left: 22%;
   h2 {
     font-family: "Microsoft YaHei UI";
     font-weight: 700;

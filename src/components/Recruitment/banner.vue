@@ -29,7 +29,7 @@ export default {
   background: linear-gradient(355.84deg, #85B7F8 1.89%, #90BEF8 95.14%);
   .block {
     width: 1100px;
-    margin-left: 340px;
+    margin-left: 20%;
     display: flex;
     justify-content: space-between;
     .right {

@@ -37,9 +37,14 @@ export default {
 
 <style lang="scss" scoped>
 .product {
-  width: 100%;
+  width: 1148px;
+  height: 700px;
   background-color: #fff;
   overflow: hidden;
+  box-shadow: 5px 4px 10px 5px rgba(0, 0, 0, 0.2);
+  margin: 0 auto;
+  position: relative;
+  top: -100px;
   .title {
     font-family: "Microsoft YaHei UI";
     font-weight: 700;
