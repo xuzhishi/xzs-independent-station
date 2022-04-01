@@ -159,11 +159,10 @@ export default {
 }
 .NFT-store {
   width: 100%;
-  height: 318px;
-  background: url("./../../assets/image/NFT__banner.jpg");
+  height: 261px;
+  background: url("./../../assets/image/NFT.jpg");
   background-size: 100% 100%;
   margin: 0 auto;
-  margin-bottom: 95px;
   position: relative;
   margin-top: 90px;
   .btn {

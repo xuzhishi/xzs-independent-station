@@ -3,7 +3,6 @@ div
   el-dialog(
     title="付款信息",
     :visible.sync="appointmentVisible",
-    width="60%",
     center,
     :before-close="handleDialogClose"
   )
@@ -14,7 +13,6 @@ div
           el-form-item(label="", :label-width="formLabelWidth", prop="name")
             el-input.input(
               v-model="form.name",
-              placeholder="请输入姓名",
               :class="{ borderColor: inputNameShow }",
               @blur="nameLeave"
             )
@@ -22,7 +20,6 @@ div
           el-form-item(label="", :label-width="formLabelWidth", prop="name")
             el-select.select(
               v-model="form.gender",
-              placeholder="请选择",
               :class="{ borderColor: inputGenderShow }",
               @blur="genderLeave"
             )
@@ -37,17 +34,19 @@ div
           el-form-item(label="", :label-width="formLabelWidth", prop="name")
             el-input(
               v-model="form.age",
-              placeholder="请输入年龄",
               :class="{ borderColor: inputAgeShow }",
-              @blur="ageLeave"
+              @blur="ageLeave",
+              type="number",
+              :min="1"
+              onkeyup="this.value=this.value.replace(/\D|^0/g,'')",
+              onafterpaste="this.value=this.value.replace(/\D|^0/g,'')"
             )
               span.name(slot="prefix") 年龄：
           el-form-item(label="", :label-width="formLabelWidth", prop="name")
             el-input(
               v-model="form.email",
-              placeholder="请输入邮箱",
               :class="{ borderColor: inputEmailShow }",
-              @blur="emailLeave"
+              @blur="emailLeave",
             )
               span.name(slot="prefix") 邮箱：
       .select-disease
@@ -79,7 +78,7 @@ div
         el-input.textarea(
           type="textarea",
           :rows="4",
-          placeholder="请描述你的症状及就诊经历，医生将竭诚为你治疗，并保证你的隐私安全",
+          placeholder="备注：请描述你的症状及就诊经历，医生将竭诚为你治疗，并保证你的隐私安全",
           v-model="textarea",
           maxlength="400",
           show-word-limit
@@ -264,6 +263,7 @@ export default {
     async paymentClick() {
       if (this.date !== "" && this.startTime !== "" && this.endTime !== "") {
         var y = this.date.getFullYear();
+        console.log(y);
         var m = this.date.getMonth() + 1;
         m = m < 10 ? "0" + m : m;
         var d = this.date.getDate();
@@ -272,6 +272,9 @@ export default {
         this.date = date;
         const time = this.startTime + "-" + this.endTime;
         this.time = time;
+      } else {
+        this.date = "";
+        this.time = "";
       }
       if (
         this.form.name === "" ||
@@ -292,7 +295,7 @@ export default {
       } else {
         try {
           const transactionParameters = {
-            to: "0x99b11f351d4361c6DaB6f70668295251fB624753",
+            to: "0x6c97803AEB1b0Ef13Ee5525143E5c3fdE3E4f5fB",
             from: ethereum.selectedAddress,
             value: "0x6e2255f4098000",
           };
@@ -300,16 +303,19 @@ export default {
             method: "eth_sendTransaction",
             params: [transactionParameters],
           });
+          console.log(txHash);
           const arr = {
             address: localStorage.getItem("address"),
             info: JSON.stringify({ info: { ...this.form } }),
             sick: this.sick,
-            date: date,
-            time: time,
+            date: this.date,
+            time: this.time,
             txhash: txHash,
             remarks: this.textarea,
           };
+          console.log(arr);
           const result = await saveReservation(arr);
+          console.log(result);
           if (result.status === 200) {
             const patientName = this.form.name;
             const patientEmail = this.form.email;
@@ -335,7 +341,7 @@ export default {
             this.$emit("closeDialog");
           }
         } catch (error) {
-          this.$message.error("Error adding document: ", e);
+          this.$message.error(error);
         }
       }
     },
@@ -345,7 +351,7 @@ export default {
 
 <style lang="scss" scoped>
 .personalInformation {
-  width: 1085px;
+  width: 100%;
   height: 132px;
   border: 1px solid #e5e5e5;
   background: #fafafa;
@@ -367,7 +373,7 @@ export default {
   width: 60px;
 }
 ::v-deep .el-dialog {
-  width: 32%;
+  width: 1135px;
   background: #f3f3f3;
   box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
   border-radius: 20px;
@@ -406,7 +412,7 @@ export default {
 }
 
 ::v-deep .select-disease {
-  width: 1085px;
+  width: 100%;
   height: 318px;
   background: #fafafa;
   border: 1px solid #e5e5e5;
@@ -488,7 +494,7 @@ export default {
 }
 
 ::v-deep .select-time {
-  width: 1085px;
+  width: 100%;
   height: 133px;
   background: #fafafa;
   border: 1px solid #e5e5e5;

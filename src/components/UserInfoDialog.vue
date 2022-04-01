@@ -118,25 +118,30 @@ export default {
   position: relative;
   .table {
     margin-left: 15px;
-    //     position: absolute;
-    //     top: -50px;
-    //     z-index: 10000000000;
+    background: pink;
+    position: absolute;
+    top: 40px;
   }
   .el-dialog__close {
     font-size: 25px;
     color: #545454;
     font-weight: bold;
   }
+  .el-tabs {
+    .el-tabs__content {
+      position: initial;
+    }
+  }
   .border {
-    width: 118px;
+    width: 110px;
     height: 70px;
-    //   background: pink;
     position: absolute;
     left: 20px;
     top: 40px;
     border-right: 2px solid #e4e7ed;
   }
   .userImg {
+    width: 46px;
     position: absolute;
     left: 50%;
     top: 50%;
@@ -146,7 +151,7 @@ export default {
 ::v-deep .el-tabs__item {
   font-family: "Microsoft YaHei UI";
   font-weight: 700;
-  font-size: 20px;
+  font-size: 18px;
   height: 60px;
   line-height: 60px;
 }

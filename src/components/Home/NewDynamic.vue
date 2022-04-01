@@ -29,17 +29,17 @@ export default {
     return {
       lastedDevelopents: [
         {
-          time: "02-05",
-          content: "首席专家许教授在元宇宙与智慧医疗高端峰会上讲话",
+          time: "04-05",
+          content: "我国医疗器械产业发展现状及思考",
         },
         {
-          time: "02-01",
+          time: "03-21",
           content:
-            "超算助力生物医药大数据进入元宇宙时代：内容+超算 大数据/AI/区块链/5G",
+            "华兴资本医疗与生命科技行业周报",
         },
         {
-          time: "01-12",
-          content: "元宇宙海拉医院搭建进入尾声，打开内部测试通道进行 测试阶段",
+          time: "02-26",
+          content: "数字医生推动医疗高质量发展 数坤科技引领全球AI医疗创新",
         },
       ],
     };
@@ -53,7 +53,6 @@ export default {
   height: 685px;
   background: rgba(196, 196, 196, 0.3);
   position: relative;
-  margin-bottom: 100px;
   .developments-center {
     width: 1100px;
     position: absolute;
@@ -149,7 +148,7 @@ export default {
           }
           .content {
             display: inline-block;
-            width: 333px;
+            width: 326px;
             font-family: "Microsoft YaHei UI";
             font-weight: 700;
             font-size: 14px;

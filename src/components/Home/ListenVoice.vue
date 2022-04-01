@@ -94,7 +94,7 @@ export default {
           const docRef = doc(db, "user", res[0]);
           const docSnap = await getDoc(docRef);
           if (
-            docSnap.data().expiretime < new Date() ||
+            docSnap.data().expiretime < new Date().getTime() ||
             docSnap.data().token !== this.$cookie.get("token") ||
             docSnap.data().expiretime != this.$cookie.get("expires")
           ) {
@@ -105,13 +105,18 @@ export default {
             try {
               const result = await diseaseList();
               this.diseaseList = result.data[0].result;
+
               const address = localStorage.getItem("address");
               const userList = await getUserInfo(address);
               this.formInfo = userList.data[0].result[0];
-              this.form.name = this.formInfo.name;
-              this.form.age = this.formInfo.age;
-              this.form.gender = this.formInfo.gender;
-              this.form.email = this.formInfo.email;
+              console.log(this.formInfo);
+              if (this.formInfo !== null) {
+                this.form.name = this.formInfo.name;
+                this.form.age = this.formInfo.age;
+                this.form.gender = this.formInfo.gender;
+                this.form.email = this.formInfo.email;
+              }
+
               const exchangeResult = await exchangeRate();
               this.exchangeRate =
                 parseFloat(exchangeResult.data[0].result, 2) * 0.031;
@@ -144,22 +149,6 @@ export default {
     loginClick() {
       this.centerDialogVisible = true;
     },
-    // 更新数据库
-    async updateUserInfo(docRef, token, expiretime) {
-      await updateDoc(docRef, {
-        token: token,
-        expiretime: expiretime,
-      });
-    },
-    // 创建数据库
-    async createUserInfo(docRef, address, token, createtime, expiretime) {
-      await setDoc(docRef, {
-        address: address,
-        token: token,
-        createtime: createtime,
-        expiretime: expiretime,
-      });
-    },
     // 请求登录接口并赋值
     async loginService(address) {
       var result = await login(address);
@@ -174,36 +163,28 @@ export default {
       this.centerDialogVisible = false;
       if (window.ethereum) {
         window.ethereum.enable().then(async (res) => {
-          // alert('当前钱包地址：'+res[0])
           this.loginService(res[0]);
           const db = getFirestore();
           const docRef = doc(db, "user", res[0]);
           const docSnap = await getDoc(docRef);
-          if (docSnap.data() == undefined) {
-            this.createUserInfo(
-              docRef,
-              res[0],
-              this.token,
-              this.createtime,
-              this.expiretime
-            );
-            this.$message.success("登录成功");
-          } else {
             if (
-              docSnap.data().expiretime < new Date() ||
+              docSnap.data().expiretime < new Date().getTime() ||
               docSnap.data().token !== this.$cookie.get("token") ||
               docSnap.data().expiretime !== this.$cookie.get("expires")
             ) {
               this.loginService(res[0]);
-              this.updateUserInfo(docRef, this.token, this.expiretime);
               this.$message.success("登录成功");
+                this.show = false;
+                this.userShow = true;
             } else {
               this.$message.success("登录成功");
+              this.show = false;
+              this.userShow = true;
             }
-          }
         });
       } else {
         alert("请安装MetaMask钱包");
+        this.show = true;
       }
     },
   },

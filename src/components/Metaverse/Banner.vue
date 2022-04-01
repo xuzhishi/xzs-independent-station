@@ -16,10 +16,10 @@ export default {};
 <style lang="scss" scoped>
 .banner {
   width: 100%;
-  height: 430px;
+  height: 450px;
   background: url("./../../assets/image/Metaverse__banner.jpg");
   margin: 0 auto;
-  background-size: 100% 430px;
+  background-size: 100% 450px;
   overflow: hidden;
   position: relative;
   .banner__title {
@@ -39,7 +39,7 @@ export default {};
   }
   .mask {
     width: 100%;
-    height: 430px;
+    height: 450px;
     background: rgba(57, 56, 55, 0.29);
     position: absolute;
     top: 0;
