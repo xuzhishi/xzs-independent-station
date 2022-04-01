@@ -5,7 +5,7 @@ div
     .banner__title
       h4 XDTX Metaverse
       h4 实现全球普惠医疗
-      h4 ss帮助人类拓展生命的维度
+      h4 帮助人类拓展生命的维度
     .mask
 </template>
 

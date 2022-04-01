@@ -41,18 +41,28 @@ getAnalytics(app);
 import Web3 from 'web3'
 Vue.prototype.Web3 = Web3
 
+
+if (window.ethereum) {
+  window.ethereum.enable().then(async (res) => {
+    // alert('当前钱包地址：' + res[0])
+    localStorage.setItem('address', res[0])
+  });
+} else{
+  alert("请安装MetaMask钱包");
+}
+
 const i18n = new VueI18n({
-  locale: 'zh-CN',    // 语言标识
-  //this.$i18n.locale // 通过切换locale的值来实现语言切换
-  messages: {
-    'zh-CN': require('./i18n/lang/zh'),   // 中文语言包
-    'en-US': require('./i18n/lang/en')    // 英文语言包
-  }
-})
+    locale: 'zh-CN',    // 语言标识
+    //this.$i18n.locale // 通过切换locale的值来实现语言切换
+    messages: {
+      'zh-CN': require('./i18n/lang/zh'),   // 中文语言包
+      'en-US': require('./i18n/lang/en')    // 英文语言包
+    }
+  })
 
 
-new Vue({
-  i18n,
-  router,
-  render: h => h(App)
-}).$mount('#app')
+  new Vue({
+    i18n,
+    router,
+    render: h => h(App)
+  }).$mount('#app')

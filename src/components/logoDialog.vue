@@ -5,7 +5,6 @@ div
     :visible.sync="centerDialogVisible",
     width="30%",
     center,
-    :close-on-click-modal="false",
     :before-close="handleClose"
   )
     img(src="./../assets/image/logo-dialog.png", width="195")
@@ -33,7 +32,6 @@ export default {
   methods: {
     confirmClick() {
       this.$emit("confirmHandleClick");
-      // console.log(this.identity)
     },
     handleClose() {
       this.$emit("handleCloseClick");

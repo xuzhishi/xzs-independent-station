@@ -59,7 +59,7 @@ export default {
 ::v-deep .banner {
   width: 100%;
   height: 828px;
-  background: url("./../../assets/image/home__banner__new.jpg");
+  background: url("./../../assets/image/home__banner__new.jpg") no-repeat;
   background-size: 100% 968px;
   overflow: hidden;
   margin-top: -80px;

@@ -3,20 +3,32 @@ div
   .personInfo
     //-  v-show="show"
     span.login(@click="loginClick", v-show="show") 登录
-    //- img.person-logo(:src="accountImg")
+    img.person-logo(:src="accountImg", @click="userInfoClick" v-show="userShow")
   logo-dialog(
     :centerDialogVisible="centerDialogVisible",
     @confirmHandleClick="confirmHandleClick",
     @handleCloseClick="handleCloseClick"
   )
-  //- #demo 11
-    vue-metamask(userMessage="msg", @onComplete="onComplete") 
+  UserInfoDialog(
+    :dialogVisible="dialogVisible",
+    @handleCloseClick="handleCloseClick",
+    :tableData="tableData",
+    :loading="loading"
+  )
+  loginDialog(
+    :loginDialogVisible="loginDialogVisible",
+    @cancelClick="cancelClick",
+    @confirmClick="confirmClick"
+  )
 </template>
 
 <script>
 import VueMetamask from "vue-metamask";
 import LogoDialog from "./logoDialog.vue";
+import UserInfoDialog from "./UserInfoDialog.vue";
+import loginDialog from "./loginDialog.vue";
 import { login } from "@/api/login.js";
+import { getOrderList } from "@/api/getOrderList.js";
 import {
   doc,
   setDoc,
@@ -29,28 +41,34 @@ export default {
   components: {
     VueMetamask,
     LogoDialog,
+    UserInfoDialog,
+    loginDialog,
   },
   data() {
     return {
       msg: "This is demo net work",
-      centerDialogVisible: false,
+      centerDialogVisible: false, //登录弹框
       token: "",
       expiretime: "",
       createtime: "",
       // identity: 1,
       show: true,
       accountImg: require("@/assets/image/person.png"),
+      dialogVisible: false, //个人信息弹框
+      tableData: [],
+      loading: true,
+      loginDialogVisible: false, //未登录提示弹框
+      userShow:false,
     };
   },
   mounted() {
-    this.centerDialogVisible = false;
     if (window.ethereum) {
       window.ethereum.enable().then(async (res) => {
-        // alert('当前钱包地址：'+res[0])
-        this.loginService(res[0]);
+        console.log(res[0])
         const db = getFirestore();
         const docRef = doc(db, "user", res[0]);
         const docSnap = await getDoc(docRef);
+        console.log(docSnap.data().expiretime + '-----------' + new Date())
         if (docSnap.data() == undefined) {
           this.createUserInfo(
             docRef,
@@ -59,17 +77,22 @@ export default {
             this.createtime,
             this.expiretime
           );
-          // this.$message.success("登录成功");
           this.show = false;
+          this.userShow = true;
         } else {
           if (
             docSnap.data().expiretime < new Date() ||
             docSnap.data().token !== this.$cookie.get("token") ||
             docSnap.data().expiretime != this.$cookie.get("expires")
           ) {
+            console.log(docSnap.data().expiretime + '-----------' + new Date())
+            console.log(docSnap.data().token + '-----------' + this.$cookie.get("token"))
+            console.log(docSnap.data().expiretime + '-----------' + this.$cookie.get("expires"))
             this.show = true;
+            this.userShow = false;
           } else {
             this.show = false;
+            this.userShow = true;
           }
         }
       });
@@ -82,10 +105,6 @@ export default {
     // 点击登录打开弹窗
     loginClick() {
       this.centerDialogVisible = true;
-    },
-    // 关闭弹窗
-    handleCloseClick() {
-      this.centerDialogVisible = false;
     },
     // 更新数据库
     async updateUserInfo(docRef, token, expiretime) {
@@ -122,6 +141,7 @@ export default {
           const db = getFirestore();
           const docRef = doc(db, "user", res[0]);
           const docSnap = await getDoc(docRef);
+          // console.log(docSnap)
           if (docSnap.data() == undefined) {
             this.createUserInfo(
               docRef,
@@ -130,25 +150,37 @@ export default {
               this.createtime,
               this.expiretime
             );
+            console.log(docSnap.data().expiretime + '-----------' + new Date())
+            console.log(docSnap.data().token + '-----------' + this.$cookie.get("token"))
+            console.log(docSnap.data().expiretime + '-----------' + this.$cookie.get("expires"))
             this.$message.success("登录成功");
             this.show = false;
+            this.userShow = true;
           } else {
             if (
               docSnap.data().expiretime < new Date() ||
               docSnap.data().token !== this.$cookie.get("token") ||
-              docSnap.data().expiretime != this.$cookie.get("expires")
+              docSnap.data().expiretime !== this.$cookie.get("expires")
             ) {
               this.loginService(res[0]);
-              this.$watch("expiretime", (newVal, oldVal) => {
-                if (newVal !== "" && oldVal !== "") {
-                  this.updateUserInfo(docRef, this.token, this.expiretime);
-                  this.$message.success("登录成功");
-                  this.show = false;
-                }
-              });
+              this.updateUserInfo(docRef, this.token, this.expiretime);
+              console.log(docSnap.data().expiretime + '-----------' + new Date())
+            console.log(docSnap.data().token + '-----------' + this.$cookie.get("token"))
+            console.log(docSnap.data().expiretime + '-----------' + this.$cookie.get("expires"))
+              this.$message.success("登录成功");
+              this.show = false;
+              this.userShow = true;
+              // this.$watch("expiretime", (newVal, oldVal) => {
+              //   // newVal !== "" && oldVal !== ""
+              //   console.log(newVal + '----------'+oldVal)
+              //   if (newVal !== oldVal) {
+
+              //   }
+              // });
             } else {
               this.$message.success("登录成功");
               this.show = false;
+              this.userShow = true;
             }
           }
         });
@@ -156,6 +188,43 @@ export default {
         alert("请安装MetaMask钱包");
         this.show = true;
       }
+    },
+    // 点击头像查看个人信息
+    async userInfoClick() {
+      if (window.ethereum) {
+        window.ethereum.enable().then(async (res) => {
+          const db = getFirestore();
+          const docRef = doc(db, "user", res[0]);
+          const docSnap = await getDoc(docRef);
+          if (
+            docSnap.data().expiretime < new Date() ||
+            docSnap.data().token !== this.$cookie.get("token") ||
+            docSnap.data().expiretime != this.$cookie.get("expires")
+          ) {
+            // alert('请登录')
+            this.loginDialogVisible = true;
+          } else {
+            this.dialogVisible = true;
+            const token = this.$cookie.get("token");
+            const result = await getOrderList(token);
+            this.tableData = result.data[0].result.data;
+            this.loading = false;
+          }
+        });
+      } else {
+        alert("请安装MetaMask钱包");
+      }
+    },
+    handleCloseClick() {
+      this.dialogVisible = false;
+      this.centerDialogVisible = false;
+    },
+    confirmClick() {
+      this.loginDialogVisible = false;
+      this.centerDialogVisible = true;
+    },
+    cancelClick() {
+      this.loginDialogVisible = false;
     },
   },
 };
@@ -185,9 +254,11 @@ export default {
   }
   .person-logo {
     position: relative;
-    top: 6px;
+    top: 15px;
+    left: 40px;
     width: 25px;
     height: 25px;
+    cursor: pointer;
   }
 }
 </style>

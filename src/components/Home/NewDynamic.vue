@@ -5,10 +5,10 @@ div
       .developments-left
         h5.title 新闻中心
         .content-1
-          p.time 03-01
-          p.content 公司举办海拉医院元宇宙发布会
+          p.time 03-24
+          p.content 国家精准医学产业创新中心揭牌
         .content-2
-          p 2022年3月1日，公司举办海拉医院元宇宙发布会，在经历四 个月的打磨和等待后，终于呈现在大家眼前。
+          p 3月 23日，国家精准医学产业创新中心揭牌仪式在成都天府国 际生物城举行，这标志着四川省首个国家级产业创新中......
         img(src="@/assets/image/new__center.jpg")
         .btn 了解更多
       .developments-right
@@ -21,29 +21,6 @@ div
             span.time {{ item.time }}
             span.content {{ item.content }}
           .line-time
-  //- .describe
-  //-   p {{ $t('home.describe1') }}
-  //-   //- p {{ $t('home.describe2') }}
-  //- .listen-voice
-  //-   .listen-right
-  //-     .company-describe
-  //-       p.right-time {{ $t('home.company__time__1') }}
-  //-       p.right-content {{ $t('home.company__content__1') }}
-  //-     .company-describe
-  //-       p.right-time {{ $t('home.company__time__2') }}
-  //-       p.right-content {{ $t('home.company__content__2') }}
-  //-     .company-describe
-  //-       p.right-time {{ $t('home.company__time__3') }}
-  //-       p.right-content {{ $t('home.company__content__3') }}
-  //-     .company-describe
-  //-       p.right-time {{ $t('home.company__time__4') }}
-  //-       p.right-content {{ $t('home.company__content__4') }}
-  //-     .company-describe
-  //-       p.right-time {{ $t('home.company__time__5') }}
-  //-       p.right-content {{ $t('home.company__content__5') }}
-  //-   .listen-left
-  //-     .left-content {{ $t('home.compay__title') }}
-  //-     //- .btn {{ $t('home.bannerBth') }}
 </template>
 
 <script>
