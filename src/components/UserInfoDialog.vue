@@ -2,10 +2,10 @@
 div
   el-dialog.dialog(:visible.sync="dialogVisible", :before-close="handleClose")
     .border
-      img.userImg(src="./../assets/image/userImg.png")
+      img.userImg(:src="avatar")
     el-tabs(
       :tab-position="tabPosition",
-      style="height: 340px; margin-top: 50px"
+      style="height: 500px; margin-top: 50px"
     )
       el-tab-pane(label="医生预约")
         .table
@@ -27,6 +27,8 @@ div
               width="190",
               align="center"
             )
+              template(slot-scope="scope")
+                span {{ scope.row.reserveTime.slice(6, 8) < 12 ? `上午 ${scope.row.reserveTime}` : `下午 ${scope.row.reserveTime}` }}
             el-table-column(
               prop="status",
               label="状态",
@@ -92,6 +94,7 @@ export default {
     dialogVisible: Boolean,
     tableData: Array,
     loading: Boolean,
+    avatar:String
   },
   data() {
     return {
@@ -112,7 +115,7 @@ export default {
 <style lang="scss" scoped>
 ::v-deep .el-dialog {
   width: 917px;
-  height: 562px;
+  height: 680px;
   box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
   border-radius: 20px;
   position: relative;

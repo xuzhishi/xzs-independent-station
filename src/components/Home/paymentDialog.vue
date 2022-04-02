@@ -14,16 +14,17 @@ div
             el-input.input(
               v-model="form.name",
               :class="{ borderColor: inputNameShow }",
+              clearable,
               @blur="nameLeave"
             )
               span.name(slot="prefix") 姓名：
           el-form-item(label="", :label-width="formLabelWidth", prop="name")
-            el-select.select(
+            el-select(
               v-model="form.gender",
+              clearable,
               :class="{ borderColor: inputGenderShow }",
-              @blur="genderLeave"
+              @change="genderLeave"
             )
-              span.name(slot="prefix") 性别
               el-option(
                 v-for="item in options",
                 :key="item.value",
@@ -35,18 +36,20 @@ div
             el-input(
               v-model="form.age",
               :class="{ borderColor: inputAgeShow }",
-              @blur="ageLeave",
               type="number",
-              :min="1"
+              :min="1",
               onkeyup="this.value=this.value.replace(/\D|^0/g,'')",
-              onafterpaste="this.value=this.value.replace(/\D|^0/g,'')"
+              onafterpaste="this.value=this.value.replace(/\D|^0/g,'')",
+              clearable,
+              @blur="ageLeave"
             )
               span.name(slot="prefix") 年龄：
           el-form-item(label="", :label-width="formLabelWidth", prop="name")
             el-input(
               v-model="form.email",
               :class="{ borderColor: inputEmailShow }",
-              @blur="emailLeave",
+              clearable,
+              @blur="emailLeave"
             )
               span.name(slot="prefix") 邮箱：
       .select-disease
@@ -94,28 +97,25 @@ div
               placeholder="Please select a date",
               :picker-options="pickerOptions",
               :class="{ borderColor: inputTimeShow }",
+              clearable,
+              style="width: 230px",
               @blur="timeLeave"
             )
-          el-form-item.appointment(
-            label="预约时间：",
-            :label-width="formLabelWidth"
-          )
-            el-time-select(
-              placeholder="起始时间",
-              v-model="startTime",
-              :picker-options={ start: '08:30', step: '01:00', end: '18:30' },
-              :class="{ borderColor: inputStartTimeShow }",
-              @blur="startTimeLeave"
+          el-form-item.appointment(label="", :label-width="formLabelWidth")
+            el-select(
+              v-model="time",
+              clearable,
+              placeholder="请选择时间段",
+              :class="{ borderColor: inputTimeDateShow }",
+              style="margin-left: -20px; width: 230px",
+              @change="timeDateLeave"
             )
-            span(style="margin-left: 10px") —
-            el-time-select(
-              placeholder="结束时间",
-              v-model="endTime",
-              :picker-options={ start: '08:30', step: '01:00', end: '18:30', minTime: startTime },
-              style="margin-left: 10px",
-              :class="{ borderColor: inputEndTimeShow }",
-              @blur="endTimeLeave"
-            )
+              el-option(
+                v-for="item in timeList",
+                :key="item.value",
+                :label="item.label",
+                :value="item.value"
+              )
     span.dialog-footer(slot="footer")
       .reservationFee
         .footer-name 预约费用
@@ -127,7 +127,9 @@ div
 
 <script>
 import { saveReservation } from "@/api/saveReservation.js";
+import { getOrderInfo } from "@/api/getOrderInfo.js";
 import { getFirestore, addDoc, collection } from "firebase/firestore";
+import debounce from "lodash/debounce";
 export default {
   props: {
     appointmentVisible: Boolean,
@@ -139,8 +141,7 @@ export default {
     return {
       textarea: "",
       date: "",
-      startTime: "",
-      endTime: "",
+      time: "",
       options: [
         {
           value: "0",
@@ -149,6 +150,40 @@ export default {
         {
           value: "1",
           label: "女",
+        },
+      ],
+      timeList: [
+        {
+          value: "上午 8:30-9:30",
+          label: "上午 8:30-9:30",
+        },
+        {
+          value: "上午 9:30-10:30",
+          label: "上午 9:30-10:30",
+        },
+        {
+          value: "上午 10:30-11:30",
+          label: "上午 10:30-11:30",
+        },
+        {
+          value: "下午 13:30-14:30",
+          label: "下午 13:30-14:30",
+        },
+        {
+          value: "下午 14:30-15:30",
+          label: "下午 14:30-15:30",
+        },
+        {
+          value: "下午 15:30-16:30",
+          label: "下午 15:30-16:30",
+        },
+        {
+          value: "下午 16:30-17:30",
+          label: "下午 16:30-17:30",
+        },
+        {
+          value: "下午 17:30-18:30",
+          label: "下午 17:30-18:30",
         },
       ],
       formLabelWidth: "100px",
@@ -169,6 +204,7 @@ export default {
       inputDateTimeShow: false,
       inputStartTimeShow: false,
       inputEndTimeShow: false,
+      inputTimeDateShow: false,
       sick: "儿童心理问题",
     };
   },
@@ -197,7 +233,7 @@ export default {
         this.inputNameShow = false;
       }
     },
-    genderLeave() {
+    genderLeave(val) {
       if (this.form.gender === "") {
         this.inputGenderShow = true;
       } else {
@@ -208,7 +244,17 @@ export default {
       if (this.form.age === "") {
         this.inputAgeShow = true;
       } else {
-        this.inputAgeShow = false;
+        var regEmail = /^([1-9]\d?|1[01]\d|120)$/;
+        if (this.form.age !== "" && !regEmail.test(this.form.age)) {
+          this.$message({
+            message: "年龄最大值为120",
+            type: "error",
+          });
+          this.form.age = "";
+          this.inputAgeShow = true;
+        } else {
+          this.inputAgeShow = false;
+        }
       }
     },
     emailLeave() {
@@ -236,42 +282,25 @@ export default {
         this.inputTimeShow = false;
       }
     },
-    // dateTimeLeave() {
-    //   if (this.date === "") {
-    //     this.inputDateTimeShow = true;
-    //   } else {
-    //     this.inputDateTimeShow = false;
-    //   }
-    // },
-    startTimeLeave() {
-      if (this.startTime === "") {
-        this.inputStartTimeShow = true;
+    timeDateLeave() {
+      if (this.time === "") {
+        this.inputTimeDateShow = true;
       } else {
-        this.inputStartTimeShow = false;
-      }
-    },
-    endTimeLeave() {
-      if (this.endTime === "") {
-        this.inputEndTimeShow = true;
-      } else {
-        this.inputEndTimeShow = false;
+        this.inputTimeDateShow = false;
       }
     },
     handleDialogClose() {
       this.$emit("handleCloseClick");
     },
-    async paymentClick() {
-      if (this.date !== "" && this.startTime !== "" && this.endTime !== "") {
-        var y = this.date.getFullYear();
-        console.log(y);
-        var m = this.date.getMonth() + 1;
+    paymentClick: debounce(async function () {
+      if (this.date !== "") {
+        var y = new Date(this.date).getFullYear();
+        var m = new Date(this.date).getMonth() + 1;
         m = m < 10 ? "0" + m : m;
-        var d = this.date.getDate();
+        var d = new Date(this.date).getDate();
         d = d < 10 ? "0" + d : d;
         const date = y + "-" + m + "-" + d;
         this.date = date;
-        const time = this.startTime + "-" + this.endTime;
-        this.time = time;
       } else {
         this.date = "";
         this.time = "";
@@ -281,8 +310,7 @@ export default {
         this.form.gender === "" ||
         this.form.age === "" ||
         this.form.email === "" ||
-        this.startTime === "" ||
-        this.endTime === "" ||
+        this.time === "" ||
         this.date === ""
       ) {
         this.nameLeave();
@@ -290,8 +318,7 @@ export default {
         this.ageLeave();
         this.emailLeave();
         this.timeLeave();
-        this.startTimeLeave();
-        this.endTimeLeave();
+        this.timeDateLeave();
       } else {
         try {
           const transactionParameters = {
@@ -303,48 +330,56 @@ export default {
             method: "eth_sendTransaction",
             params: [transactionParameters],
           });
-          console.log(txHash);
-          const arr = {
-            address: localStorage.getItem("address"),
-            info: JSON.stringify({ info: { ...this.form } }),
-            sick: this.sick,
-            date: this.date,
-            time: this.time,
-            txhash: txHash,
-            remarks: this.textarea,
-          };
-          console.log(arr);
-          const result = await saveReservation(arr);
-          console.log(result);
-          if (result.status === 200) {
-            const patientName = this.form.name;
-            const patientEmail = this.form.email;
-            const patientGender = this.form.gender === "1" ? "女" : "男";
-            const patientAge = this.form.age;
-            const patientSick = this.sick;
-            const appointmentDate = this.date;
-            const appointmentTime = this.time;
-            const patientConcern = this.textarea;
-            const db = getFirestore();
-            await addDoc(collection(db, "mail"), {
-              to: patientEmail,
-              cc: "xdtxorg@gmail.com",
-              message: {
-                subject: "Your Appointment",
-                html: `<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=1"><style>.body { background-color:#F9F9F9; } a { color:inherit; text-decoration:none !important; text-decoration:none; } a.cta_button { color:#fff; } .large-6, .large-4{ box-sizing:border-box; } p {margin-top: 16px; margin-bottom: 16px;} @media screen and (max-width:560px) { .row{ width:100%!important; width:100%; } .fi{ font-size:14px!important; } .ttl, .ttl a{ font-size:22px!important; } .dscr, .dscr p, .dscr span, .dscr div, .dscr .div, .dscr strong{ font-size:18px!important; font-size:18px; } .small-12 .dscr{ width:100%; width:100%!important; min-width:100%; } .small-float-center, .small-text-center { text-align:center !important; } .small-float-center { margin:0 auto !important; float:none !important; } .small-text-left { text-align:left !important; } .small-text-right { text-align:right !important; } .hide-for-large { display:block !important; width:auto !important; overflow:visible !important; max-height:none !important; font-size:inherit !important; line-height:inherit !important } center{ min-width:0!important; } table.container{ width:100%!important; } table.body table.container .hide-for-large, table.body table.container .row.hide-for-large { display:table !important; width:100% !important } table.body table.container .callout-inner.hide-for-large { display:table-cell !important; width:100% !important } table.body table.container .show-for-large { display:none !important; width:0; mso-hide:all; overflow:hidden; } table.body img { width:auto; height:auto; } table.body center { min-width:0 !important; } table.body .container { width:95% !important; } table.body .column, table.body .columns { height:auto !important; box-sizing:border-box; } table.body .columns.large-6, table.body .columns.large-4, table.body .columns.large-3{ padding-left:8px !important; padding-right:8px !important; } table.body .collapse .column, table.body .collapse .columns, table.body .column .column, table.body .column .columns, table.body .columns .column, table.body .columns .columns { padding-left:0 !important; padding-right:0 !important; } td.small-6, th.small-6, img.small-6 { display:inline-block !important; width:50% !important; } img.small-12, td.small-12, th.small-12 { width:100% !important; display:inline-block !important; } .column td.small-12, .column th.small-12, .columns td.small-12, .columns th.small-12 { display:block !important; width:100% !important; } img.sclbtn{ min-width:24px!important; min-height:24px!important; max-width:100px!important; } .mcnPreviewText{ display:none !important; } .ssc{ display:inline-block !important; margin:5px 0; } }</style></head><body class="body" style="-moz-box-sizing:border-box;-ms-text-size-adjust:100%;-webkit-box-sizing:border-box;-webkit-text-size-adjust:100%;background:#F9F9F9!important;box-sizing:border-box;font-size:1px;margin:0;min-width:100%;padding:0;width:100%!important"><img src="https://publicate.it/open/email/274458/pic.gif?1645522230" width="1" height="1" style="width:1px;height:1px;max-width:1px !important;max-height:1px !important;width:1px !important;height:1px !important;"><table class="body" id="publicateemailcontainer" style="background:#F9F9F9!important;background-color:#F9F9F9;border-collapse:collapse;border-spacing:0;font-size:1px;height:100%;line-height:0;margin:0;padding:0;vertical-align:top;width:100%"><tbody><tr style="padding:0;vertical-align:top"><td dir="auto" class="float-center" align="center" valign="top" style="border-collapse:collapse!important;float:none;font-size:1px;line-height:0;margin:0 auto;padding:0;text-align:center;vertical-align:top;word-wrap:break-word;-moz-hyphens:none;-ms-hyphens:none;-webkit-hyphens:none;hyphens:none;"><table width="640" align="center" class="container float-center" style="background:#FFFFFF;border-collapse:collapse;border-spacing:0;float:none;margin:0 auto;padding:0;text-align:center;vertical-align:top;width:640px"><tbody><tr style="padding:0;vertical-align:top"><td dir="auto" style="padding:0"><table class="row" border="0" cellpadding="0" cellspacing="0" style="border-collapse:collapse; background-color:transparent; mso-table-lspace:0pt;mso-table-rspace:0pt;border-spacing:0;display:table;padding:0;position:relative;vertical-align:top;width:100%;margin:0;"><tbody><tr style="padding:0;vertical-align:top" valign="top"><th valign="top" dir="auto" class="small-12 large-12 columns" style="margin:0 auto;padding:0;padding-bottom:15px;padding-top:15px;padding-left:0px;padding-right:0px;width:640px"><table style="border-collapse:collapse;border-spacing:0;padding:0;vertical-align:top;width:100%"><tbody><tr style="padding:0;vertical-align:top"><th dir="auto" align="left" style="padding:0;background-color:transparent;color:#555555;font-family:helvetica,arial,verdana,sans-serif;font-size:17px;font-weight:normal;line-height:1.5;margin:0;"><table width="100%" border="0" cellspacing="0" cellpadding="0" style="border-collapse:collapse;border-spacing:0;display:table;padding:0;margin:0;width:100%;"><tr><td> <table border="0" cellspacing="0" cellpadding="0" align="center"><tr><td align="center" style="padding:10px 7px; line-height:1.2!important;text-align:center; border-radius:0px; -webkit-border-radius: 0px; -moz-border-radius: 0px;" bgcolor="transparent"><h2 dir="auto" style="padding: 0; margin: 0!important;line-height: 1.2;display:inline-block;width:auto;border:transparent 1px solid;text-align:center;font-weight:normal;font-style:normal;color:#555555;font-size:32px;background-color:transparent;border-radius:0px; -webkit-border-radius: 0px; -moz-border-radius: 0px;font-family: helvetica,arial,verdana,sans-serif;vertical-align: top;"><span>Your Appointment</span></h2></td> </tr></table></td> </tr></table></th></tr></tbody></table></th></tr></tbody></table><!--[if (gte mso 9)|(IE)]></td></tr><tr style='padding:0;vertical-align:top'><td dir='auto' style='-moz-hyphens:auto;-webkit-hyphens:auto;Margin:0;border-collapse:collapse!important;color:inherit;font-family:inherit;font-size:1px;font-weight:normal;hyphens:auto;line-height:0;margin:0;padding:0;vertical-align:top;word-wrap:break-word'><![endif]--><table class="row" border="0" cellpadding="0" cellspacing="0" style="border-collapse:collapse; background-color:transparent; mso-table-lspace:0pt;mso-table-rspace:0pt;border-spacing:0;display:table;padding:0;position:relative;vertical-align:top;width:100%;margin:0;"><tbody><tr style="padding:0;vertical-align:top" valign="top"><th valign="top" dir="auto" class="small-12 large-12" style="margin:0 auto;padding:0;width:640px"><table style="border-collapse:collapse;border-spacing:0;padding:0;vertical-align:top;width:100%" width="100%"><tbody><tr style="padding:0;vertical-align:top"><th dir="auto" align="left" style="padding:0;background-color:transparent;color:inherit;font-family:helvetica,arial,verdana,sans-serif;font-size:17px;font-weight:normal;line-height:1.5;margin:0;"><table cellpadding="0" cellspacing="0" border="0" width="100%" style="margin:0;"><tr><td align="center"><hr size="1" width="66%" style="color:#bbbbbb; width: 66%; border-color:#bbbbbb; background-color:#bbbbbb; margin:0; margin-top:17.5px; margin-bottom:17.5px;"></td></tr></table></th></tr></tbody></table></th></tr></tbody></table><!--[if (gte mso 9)|(IE)]></td></tr><tr style='padding:0;vertical-align:top'><td dir='auto' style='-moz-hyphens:auto;-webkit-hyphens:auto;Margin:0;border-collapse:collapse!important;color:inherit;font-family:inherit;font-size:1px;font-weight:normal;hyphens:auto;line-height:0;margin:0;padding:0;vertical-align:top;word-wrap:break-word'><![endif]--><table class="row" border="0" cellpadding="0" cellspacing="0" style="border-collapse:collapse; background-color:transparent; mso-table-lspace:0pt;mso-table-rspace:0pt;border-spacing:0;display:table;padding:0;position:relative;vertical-align:top;width:100%;margin:0;"><tbody><tr style="padding:0;vertical-align:top" valign="top"><th valign="top" dir="auto" class="small-12 large-12 columns" style="margin:0 auto;padding:0;padding-bottom:15px;padding-top:15px;padding-left:6px;padding-right:6px;width:640px"><table style="border-collapse:collapse;border-spacing:0;padding:0;vertical-align:top;width:100%"><tbody><tr style="padding:0;vertical-align:top"><th dir="auto" align="left" style="padding:0;background-color:transparent;color:inherit;font-family:helvetica,arial,verdana,sans-serif;font-size:17px;font-weight:normal;line-height:1.5;margin:0;"><table bgcolor="transparent" style="background-color: transparent;border-spacing:0;border-collapse:collapse;padding:0;vertical-align:top;width:100%" width="100%" dir="auto"><tr><td width="100%" height="5" style="font-size:1px; line-height:5px;height:5px;">&nbsp;</td></tr><tr><td style="padding:0 8px 0 8px;padding-left:8px;padding-right:8px;" dir="auto"><div class="dscr" style="color:#555555;margin:0;font-family: helvetica,arial,verdana,sans-serif; font-size: 14px; font-weight:300; line-height: 1.5; overflow:auto;" dir="auto"><span><div style="font-size: 14px; font-family: helvetica,arial,verdana,sans-serif; color: inherit;"><p style="text-align: center;"><strong><span style="font-size: 16px;">Dear ${patientName}</span></strong></p><p style="margin-block-start: 14px;margin-block-end: 14px;">&nbsp;</p><p style="text-align: center;">Thank you very much for making appointment with us on xdtx.org.</p><p style="text-align: center;">Your appointment detail is listed below</p></div></span></div></td></tr><tr><td style="font-size:1px; height:10px" height="10"></td></tr></table></th></tr></tbody></table></th></tr></tbody></table><!--[if (gte mso 9)|(IE)]></td></tr><tr style='padding:0;vertical-align:top'><td dir='auto' style='-moz-hyphens:auto;-webkit-hyphens:auto;Margin:0;border-collapse:collapse!important;color:inherit;font-family:inherit;font-size:1px;font-weight:normal;hyphens:auto;line-height:0;margin:0;padding:0;vertical-align:top;word-wrap:break-word'><![endif]--><table class="row" border="0" cellpadding="0" cellspacing="0" style="border-collapse:collapse; background-color:transparent; mso-table-lspace:0pt;mso-table-rspace:0pt;border-spacing:0;display:table;padding:0;position:relative;vertical-align:top;width:100%;margin:0;"><tbody><tr style="padding:0;vertical-align:top" valign="top"><th valign="top" dir="auto" class="small-12 large-12" style="margin:0 auto;padding:0;width:640px"><table style="border-collapse:collapse;border-spacing:0;padding:0;vertical-align:top;width:100%" width="100%"><tbody><tr style="padding:0;vertical-align:top"><th dir="auto" align="left" style="padding:0;background-color:transparent;color:inherit;font-family:helvetica,arial,verdana,sans-serif;font-size:17px;font-weight:normal;line-height:1.5;margin:0;"><table cellpadding="0" cellspacing="0" border="0" width="100%" style="margin:0;"><tr><td align="center"><hr size="1" width="66%" style="color:#bbbbbb; width: 66%; border-color:#bbbbbb; background-color:#bbbbbb; margin:0; margin-top:17.5px; margin-bottom:17.5px;"></td></tr></table></th></tr></tbody></table></th></tr></tbody></table><!--[if (gte mso 9)|(IE)]></td></tr><tr style='padding:0;vertical-align:top'><td dir='auto' style='-moz-hyphens:auto;-webkit-hyphens:auto;Margin:0;border-collapse:collapse!important;color:inherit;font-family:inherit;font-size:1px;font-weight:normal;hyphens:auto;line-height:0;margin:0;padding:0;vertical-align:top;word-wrap:break-word'><![endif]--><table class="row" border="0" cellpadding="0" cellspacing="0" style="border-collapse:collapse; background-color:transparent; mso-table-lspace:0pt;mso-table-rspace:0pt;border-spacing:0;display:table;padding:0;position:relative;vertical-align:top;width:100%;margin:0;"><tbody><tr style="padding:0;vertical-align:top" valign="top"><th valign="top" dir="auto" class="small-12 large-12 columns" style="margin:0 auto;padding:0;padding-bottom:15px;padding-top:15px;padding-left:50px;padding-right:50px;width:640px"><table style="border-collapse:collapse;border-spacing:0;padding:0;vertical-align:top;width:100%"><tbody><tr style="padding:0;vertical-align:top"><th dir="auto" align="left" style="padding:0;background-color:transparent;color:inherit;font-family:helvetica,arial,verdana,sans-serif;font-size:17px;font-weight:normal;line-height:1.5;margin:0;"><table bgcolor="transparent" style="background-color: transparent;border-spacing:0;border-collapse:collapse;padding:0;vertical-align:top;width:100%" width="100%" dir="auto"><tr><td width="100%" height="5" style="font-size:1px; line-height:5px;height:5px;">&nbsp;</td></tr><tr><td style="padding:0 8px 0 8px;padding-left:8px;padding-right:8px;" dir="auto"><div class="dscr" style="color:#555555;margin:0;font-family: helvetica,arial,verdana,sans-serif; font-size: 14px; font-weight:300; line-height: 1.5; overflow:auto;" dir="auto"><span><div style="text-align: auto;"><ul><li><strong>Name</strong>: ${patientName}</li><li><strong>Contact</strong>: ${patientEmail}</li><li><strong>Gender</strong>：${patientGender}</li><li><strong>Age</strong>：${patientAge}</li><li><strong>Sick</strong>：${patientSick}</li><li><strong>Date</strong>: ${appointmentDate}</li><li><strong>Time</strong>: ${appointmentTime}</li><li><strong>Concern</strong>: ${patientConcern}</li></ul><p style="display:none;"></p><div style="text-align: auto;">&nbsp;</div></div></span></div></td></tr><tr><td style="font-size:1px; height:10px" height="10"></td></tr></table></th></tr></tbody></table></th></tr></tbody></table><!--[if (gte mso 9)|(IE)]></td></tr><tr style='padding:0;vertical-align:top'><td dir='auto' style='-moz-hyphens:auto;-webkit-hyphens:auto;Margin:0;border-collapse:collapse!important;color:inherit;font-family:inherit;font-size:1px;font-weight:normal;hyphens:auto;line-height:0;margin:0;padding:0;vertical-align:top;word-wrap:break-word'><![endif]--><table class="row" border="0" cellpadding="0" cellspacing="0" style="border-collapse:collapse; background-color:transparent; mso-table-lspace:0pt;mso-table-rspace:0pt;border-spacing:0;display:table;padding:0;position:relative;vertical-align:top;width:100%;margin:0;"><tbody><tr style="padding:0;vertical-align:top" valign="top"><th valign="top" dir="auto" class="small-12 large-12" style="margin:0 auto;padding:0;width:640px"><table style="border-collapse:collapse;border-spacing:0;padding:0;vertical-align:top;width:100%" width="100%"><tbody><tr style="padding:0;vertical-align:top"><th dir="auto" align="left" style="padding:0;background-color:transparent;color:inherit;font-family:helvetica,arial,verdana,sans-serif;font-size:17px;font-weight:normal;line-height:1.5;margin:0;"><table cellpadding="0" cellspacing="0" border="0" width="100%" style="margin:0;"><tr><td align="center"><hr size="1" width="66%" style="color:#bbbbbb; width: 66%; border-color:#bbbbbb; background-color:#bbbbbb; margin:0; margin-top:2.5px; margin-bottom:17.5px;"></td></tr></table></th></tr></tbody></table></th></tr></tbody></table><!--[if (gte mso 9)|(IE)]></td></tr><tr style='padding:0;vertical-align:top'><td dir='auto' style='-moz-hyphens:auto;-webkit-hyphens:auto;Margin:0;border-collapse:collapse!important;color:inherit;font-family:inherit;font-size:1px;font-weight:normal;hyphens:auto;line-height:0;margin:0;padding:0;vertical-align:top;word-wrap:break-word'><![endif]--><table class="row" border="0" cellpadding="0" cellspacing="0" style="border-collapse:collapse; background-color:transparent; mso-table-lspace:0pt;mso-table-rspace:0pt;border-spacing:0;display:table;padding:0;position:relative;vertical-align:top;width:100%;margin:0;"><tbody><tr style="padding:0;vertical-align:top" valign="top"><th valign="top" dir="auto" class="small-12 large-12 columns" style="margin:0 auto;padding:0;padding-bottom:15px;padding-top:15px;padding-left:6px;padding-right:6px;width:640px"><table style="border-collapse:collapse;border-spacing:0;padding:0;vertical-align:top;width:100%"><tbody><tr style="padding:0;vertical-align:top"><th dir="auto" align="left" style="padding:0;background-color:transparent;color:inherit;font-family:helvetica,arial,verdana,sans-serif;font-size:17px;font-weight:normal;line-height:1.5;margin:0;"><table bgcolor="transparent" style="background-color: transparent;border-spacing:0;border-collapse:collapse;padding:0;vertical-align:top;width:100%" width="100%" dir="auto"><tr><td width="100%" height="5" style="font-size:1px; line-height:5px;height:5px;">&nbsp;</td></tr><tr><td style="padding:0 8px 0 8px;padding-left:8px;padding-right:8px;" dir="auto"><div class="dscr" style="color:#555555;margin:0;font-family: helvetica,arial,verdana,sans-serif; font-size: 14px; font-weight:300; line-height: 1.5; overflow:auto;" dir="auto"><span><div style="font-size: 14px; font-family: helvetica,arial,verdana,sans-serif; color: inherit;"><p style="text-align: center;">We will let you know as soon as our next expert become available.</p><p style="text-align: center;">Also, please feel free to contact us by directly replying to this email.</p></div></span></div></td></tr><tr><td style="font-size:1px; height:10px" height="10"></td></tr></table></th></tr></tbody></table></th></tr></tbody></table><!--[if (gte mso 9)|(IE)]></td></tr><tr style='padding:0;vertical-align:top'><td dir='auto' style='-moz-hyphens:auto;-webkit-hyphens:auto;Margin:0;border-collapse:collapse!important;color:inherit;font-family:inherit;font-size:1px;font-weight:normal;hyphens:auto;line-height:0;margin:0;padding:0;vertical-align:top;word-wrap:break-word'><![endif]--><table class="row" border="0" cellpadding="0" cellspacing="0" style="border-collapse:collapse; background-color:transparent; mso-table-lspace:0pt;mso-table-rspace:0pt;border-spacing:0;display:table;padding:0;position:relative;vertical-align:top;width:100%;margin:0;"><tbody><tr style="padding:0;vertical-align:top" valign="top"><th valign="top" dir="auto" class="small-12 large-12 columns" style="margin:0 auto;padding:0;padding-bottom:15px;padding-top:15px;padding-left:6px;padding-right:6px;width:640px"><table style="border-collapse:collapse;border-spacing:0;padding:0;vertical-align:top;width:100%"><tbody><tr style="padding:0;vertical-align:top"><th dir="auto" align="left" style="padding:0;background-color:transparent;color:inherit;font-family:helvetica,arial,verdana,sans-serif;font-size:17px;font-weight:normal;line-height:1.5;margin:0;"><table bgcolor="transparent" style="background-color: transparent;border-spacing:0;border-collapse:collapse;padding:0;vertical-align:top;width:100%" width="100%" dir="auto"><tr><td width="100%" height="5" style="font-size:1px; line-height:5px;height:5px;">&nbsp;</td></tr><tr><td style="padding:0 8px 0 8px;padding-left:8px;padding-right:8px;" dir="auto"><div class="dscr" style="color:#555555;margin:0;font-family: helvetica,arial,verdana,sans-serif; font-size: 14px; font-weight:300; line-height: 1.5; overflow:auto;" dir="auto"><span><div style="font-size: 14px; font-family: helvetica,arial,verdana,sans-serif; color: inherit;"><p style="text-align: right;"><em><span style="color: #555555;">We wish you thrive!</span></em></p></div></span></div></td></tr><tr><td style="font-size:1px; height:10px" height="10"></td></tr></table></th></tr></tbody></table></th></tr></tbody></table><!--[if (gte mso 9)|(IE)]></td></tr><tr style='padding:0;vertical-align:top'><td dir='auto' style='-moz-hyphens:auto;-webkit-hyphens:auto;Margin:0;border-collapse:collapse!important;color:inherit;font-family:inherit;font-size:1px;font-weight:normal;hyphens:auto;line-height:0;margin:0;padding:0;vertical-align:top;word-wrap:break-word'><![endif]--><table class="row" border="0" cellpadding="0" cellspacing="0" style="border-collapse:collapse; background-color:transparent; mso-table-lspace:0pt;mso-table-rspace:0pt;border-spacing:0;display:table;padding:0;position:relative;vertical-align:top;width:100%;margin:0;"><tbody><tr style="padding:0;vertical-align:top" valign="top"><th valign="top" dir="auto" class="small-12 large-12 columns" style="margin:0 auto;padding:0;padding-bottom:15px;padding-top:15px;padding-left:6px;padding-right:6px;width:640px"><table style="border-collapse:collapse;border-spacing:0;padding:0;vertical-align:top;width:100%"><tbody><tr style="padding:0;vertical-align:top"><th dir="auto" align="left" style="padding:0;background-color:transparent;color:inherit;font-family:helvetica,arial,verdana,sans-serif;font-size:17px;font-weight:normal;line-height:1.5;margin:0;"><table bgcolor="transparent" style="background-color: transparent;border-spacing:0;border-collapse:collapse;padding:0;vertical-align:top;width:100%" width="100%" dir="auto"><tr><td width="100%" style="padding: 0; text-align:right"><img alt="" border="0" width="84" height="22" style="vertical-align:top; display:inline-block; border:none; outline:0; float:none; clear:both; text-decoration:none; width:84px; margin:0; max-width:84px;" src="https://img.pblc.it/i/950x306x9.f.S3/075b1/xdtxlogo-2267367-1.png" class="small-12 img84x22"></td></tr></table></th></tr></tbody></table></th></tr></tbody></table><!--[if (gte mso 9)|(IE)]></td></tr><tr style='padding:0;vertical-align:top'><td dir='auto' style='-moz-hyphens:auto;-webkit-hyphens:auto;Margin:0;border-collapse:collapse!important;color:inherit;font-family:inherit;font-size:1px;font-weight:normal;hyphens:auto;line-height:0;margin:0;padding:0;vertical-align:top;word-wrap:break-word'><![endif]--><table class="row" border="0" cellpadding="0" cellspacing="0" style="border-collapse:collapse; background-color:transparent; mso-table-lspace:0pt;mso-table-rspace:0pt;border-spacing:0;display:table;padding:0;position:relative;vertical-align:top;width:100%;margin:0;"><tbody><tr style="padding:0;vertical-align:top" valign="top"><th valign="top" dir="auto" class="small-12 large-12 columns" style="margin:0 auto;padding:0;width:640px"><table style="border-collapse:collapse;border-spacing:0;padding:0;vertical-align:top;width:100%"><tbody><tr style="padding:0;vertical-align:top"><th dir="auto" align="left" style="padding:0;background-color:transparent;color:inherit;font-family:helvetica,arial,verdana,sans-serif;font-size:17px;font-weight:normal;line-height:1.5;margin:0;"><table class="spacer" style="border-collapse:collapse;border-spacing:0;padding:0;text-align:left;vertical-align:top;width:100%"><tbody><tr style="padding:0;text-align:left;vertical-align:top"><td height="16" style="-moz-hyphens:auto;-webkit-hyphens:auto;Margin:0;border-collapse:collapse!important;margin:0;mso-line-height-rule:exactly;padding:0;vertical-align:top;">&nbsp;</td></tr></tbody></table><p align="center" style="text-align: center"><a target="_blank" style="text-decoration:none!important;outline:0!important;border:none!important;" href="https://publicate.it/?e=274458"><img width="150" height="21" style="border:none; outline:0; width:150px; margin:0 auto; vertical-align:middle!important;" alt="created in Publicate" src="https://publicate.it/imgs/created_in_publicate.gif"></a></p><table class="spacer" style="border-collapse:collapse;border-spacing:0;padding:0;text-align:left;vertical-align:top;width:100%"><tbody><tr style="padding:0;text-align:left;vertical-align:top"><td height="16" style="-moz-hyphens:auto;-webkit-hyphens:auto;Margin:0;border-collapse:collapse!important;margin:0;mso-line-height-rule:exactly;padding:0;vertical-align:top;">&nbsp;</td></tr></tbody></table></th></tr></tbody></table></th></tr></tbody></table><!--[if (gte mso 9)|(IE)]></td></tr><tr style='padding:0;vertical-align:top'><td dir='auto' style='-moz-hyphens:auto;-webkit-hyphens:auto;Margin:0;border-collapse:collapse!important;color:inherit;font-family:inherit;font-size:1px;font-weight:normal;hyphens:auto;line-height:0;margin:0;padding:0;vertical-align:top;word-wrap:break-word'><![endif]--></td></tr></tbody></table><table width="100%"><tr><td width="100%" height="40"><p style="margin-block-start: 14px;margin-block-end: 14px;">&nbsp;</p></td></tr></table></td></tr></tbody></table></body></html>`,
-              },
-            });
-            this.$message({
-              message: "Appointment succeeded, please check spam box",
-              type: "success",
-            });
-            this.$emit("closeDialog");
+          const result1 = await getOrderInfo(txHash);
+          if (result1.status === 200) {
+            const gas = result1.data[0].result.gas;
+            const gasPrice = result1.data[0].result.gasPrice;
+            const value = result1.data[0].result.value;
+            const arr = {
+              address: localStorage.getItem("address"),
+              info: JSON.stringify({ info: { ...this.form } }),
+              sick: this.sick,
+              date: this.date,
+              time: this.time.slice(3),
+              txhash: txHash,
+              remarks: this.textarea,
+              gas: gas,
+              gasPrice: gasPrice,
+              value: value,
+            };
+            const result = await saveReservation(arr);
+            if (result.status === 200) {
+              const patientName = this.form.name;
+              const patientEmail = this.form.email;
+              const patientGender = this.form.gender === "1" ? "女" : "男";
+              const patientAge = this.form.age;
+              const patientSick = this.sick;
+              const appointmentDate = this.date;
+              const appointmentTime = this.time;
+              const patientConcern = this.textarea;
+              const db = getFirestore();
+              await addDoc(collection(db, "mail"), {
+                to: patientEmail,
+                cc: "xdtxorg@gmail.com",
+                message: {
+                  subject: "Your Appointment",
+                  html: `<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=1"><style>.body { background-color:#F9F9F9; } a { color:inherit; text-decoration:none !important; text-decoration:none; } a.cta_button { color:#fff; } .large-6, .large-4{ box-sizing:border-box; } p {margin-top: 16px; margin-bottom: 16px;} @media screen and (max-width:560px) { .row{ width:100%!important; width:100%; } .fi{ font-size:14px!important; } .ttl, .ttl a{ font-size:22px!important; } .dscr, .dscr p, .dscr span, .dscr div, .dscr .div, .dscr strong{ font-size:18px!important; font-size:18px; } .small-12 .dscr{ width:100%; width:100%!important; min-width:100%; } .small-float-center, .small-text-center { text-align:center !important; } .small-float-center { margin:0 auto !important; float:none !important; } .small-text-left { text-align:left !important; } .small-text-right { text-align:right !important; } .hide-for-large { display:block !important; width:auto !important; overflow:visible !important; max-height:none !important; font-size:inherit !important; line-height:inherit !important } center{ min-width:0!important; } table.container{ width:100%!important; } table.body table.container .hide-for-large, table.body table.container .row.hide-for-large { display:table !important; width:100% !important } table.body table.container .callout-inner.hide-for-large { display:table-cell !important; width:100% !important } table.body table.container .show-for-large { display:none !important; width:0; mso-hide:all; overflow:hidden; } table.body img { width:auto; height:auto; } table.body center { min-width:0 !important; } table.body .container { width:95% !important; } table.body .column, table.body .columns { height:auto !important; box-sizing:border-box; } table.body .columns.large-6, table.body .columns.large-4, table.body .columns.large-3{ padding-left:8px !important; padding-right:8px !important; } table.body .collapse .column, table.body .collapse .columns, table.body .column .column, table.body .column .columns, table.body .columns .column, table.body .columns .columns { padding-left:0 !important; padding-right:0 !important; } td.small-6, th.small-6, img.small-6 { display:inline-block !important; width:50% !important; } img.small-12, td.small-12, th.small-12 { width:100% !important; display:inline-block !important; } .column td.small-12, .column th.small-12, .columns td.small-12, .columns th.small-12 { display:block !important; width:100% !important; } img.sclbtn{ min-width:24px!important; min-height:24px!important; max-width:100px!important; } .mcnPreviewText{ display:none !important; } .ssc{ display:inline-block !important; margin:5px 0; } }</style></head><body class="body" style="-moz-box-sizing:border-box;-ms-text-size-adjust:100%;-webkit-box-sizing:border-box;-webkit-text-size-adjust:100%;background:#F9F9F9!important;box-sizing:border-box;font-size:1px;margin:0;min-width:100%;padding:0;width:100%!important"><img src="https://publicate.it/open/email/274458/pic.gif?1645522230" width="1" height="1" style="width:1px;height:1px;max-width:1px !important;max-height:1px !important;width:1px !important;height:1px !important;"><table class="body" id="publicateemailcontainer" style="background:#F9F9F9!important;background-color:#F9F9F9;border-collapse:collapse;border-spacing:0;font-size:1px;height:100%;line-height:0;margin:0;padding:0;vertical-align:top;width:100%"><tbody><tr style="padding:0;vertical-align:top"><td dir="auto" class="float-center" align="center" valign="top" style="border-collapse:collapse!important;float:none;font-size:1px;line-height:0;margin:0 auto;padding:0;text-align:center;vertical-align:top;word-wrap:break-word;-moz-hyphens:none;-ms-hyphens:none;-webkit-hyphens:none;hyphens:none;"><table width="640" align="center" class="container float-center" style="background:#FFFFFF;border-collapse:collapse;border-spacing:0;float:none;margin:0 auto;padding:0;text-align:center;vertical-align:top;width:640px"><tbody><tr style="padding:0;vertical-align:top"><td dir="auto" style="padding:0"><table class="row" border="0" cellpadding="0" cellspacing="0" style="border-collapse:collapse; background-color:transparent; mso-table-lspace:0pt;mso-table-rspace:0pt;border-spacing:0;display:table;padding:0;position:relative;vertical-align:top;width:100%;margin:0;"><tbody><tr style="padding:0;vertical-align:top" valign="top"><th valign="top" dir="auto" class="small-12 large-12 columns" style="margin:0 auto;padding:0;padding-bottom:15px;padding-top:15px;padding-left:0px;padding-right:0px;width:640px"><table style="border-collapse:collapse;border-spacing:0;padding:0;vertical-align:top;width:100%"><tbody><tr style="padding:0;vertical-align:top"><th dir="auto" align="left" style="padding:0;background-color:transparent;color:#555555;font-family:helvetica,arial,verdana,sans-serif;font-size:17px;font-weight:normal;line-height:1.5;margin:0;"><table width="100%" border="0" cellspacing="0" cellpadding="0" style="border-collapse:collapse;border-spacing:0;display:table;padding:0;margin:0;width:100%;"><tr><td> <table border="0" cellspacing="0" cellpadding="0" align="center"><tr><td align="center" style="padding:10px 7px; line-height:1.2!important;text-align:center; border-radius:0px; -webkit-border-radius: 0px; -moz-border-radius: 0px;" bgcolor="transparent"><h2 dir="auto" style="padding: 0; margin: 0!important;line-height: 1.2;display:inline-block;width:auto;border:transparent 1px solid;text-align:center;font-weight:normal;font-style:normal;color:#555555;font-size:32px;background-color:transparent;border-radius:0px; -webkit-border-radius: 0px; -moz-border-radius: 0px;font-family: helvetica,arial,verdana,sans-serif;vertical-align: top;"><span>Your Appointment</span></h2></td> </tr></table></td> </tr></table></th></tr></tbody></table></th></tr></tbody></table><!--[if (gte mso 9)|(IE)]></td></tr><tr style='padding:0;vertical-align:top'><td dir='auto' style='-moz-hyphens:auto;-webkit-hyphens:auto;Margin:0;border-collapse:collapse!important;color:inherit;font-family:inherit;font-size:1px;font-weight:normal;hyphens:auto;line-height:0;margin:0;padding:0;vertical-align:top;word-wrap:break-word'><![endif]--><table class="row" border="0" cellpadding="0" cellspacing="0" style="border-collapse:collapse; background-color:transparent; mso-table-lspace:0pt;mso-table-rspace:0pt;border-spacing:0;display:table;padding:0;position:relative;vertical-align:top;width:100%;margin:0;"><tbody><tr style="padding:0;vertical-align:top" valign="top"><th valign="top" dir="auto" class="small-12 large-12" style="margin:0 auto;padding:0;width:640px"><table style="border-collapse:collapse;border-spacing:0;padding:0;vertical-align:top;width:100%" width="100%"><tbody><tr style="padding:0;vertical-align:top"><th dir="auto" align="left" style="padding:0;background-color:transparent;color:inherit;font-family:helvetica,arial,verdana,sans-serif;font-size:17px;font-weight:normal;line-height:1.5;margin:0;"><table cellpadding="0" cellspacing="0" border="0" width="100%" style="margin:0;"><tr><td align="center"><hr size="1" width="66%" style="color:#bbbbbb; width: 66%; border-color:#bbbbbb; background-color:#bbbbbb; margin:0; margin-top:17.5px; margin-bottom:17.5px;"></td></tr></table></th></tr></tbody></table></th></tr></tbody></table><!--[if (gte mso 9)|(IE)]></td></tr><tr style='padding:0;vertical-align:top'><td dir='auto' style='-moz-hyphens:auto;-webkit-hyphens:auto;Margin:0;border-collapse:collapse!important;color:inherit;font-family:inherit;font-size:1px;font-weight:normal;hyphens:auto;line-height:0;margin:0;padding:0;vertical-align:top;word-wrap:break-word'><![endif]--><table class="row" border="0" cellpadding="0" cellspacing="0" style="border-collapse:collapse; background-color:transparent; mso-table-lspace:0pt;mso-table-rspace:0pt;border-spacing:0;display:table;padding:0;position:relative;vertical-align:top;width:100%;margin:0;"><tbody><tr style="padding:0;vertical-align:top" valign="top"><th valign="top" dir="auto" class="small-12 large-12 columns" style="margin:0 auto;padding:0;padding-bottom:15px;padding-top:15px;padding-left:6px;padding-right:6px;width:640px"><table style="border-collapse:collapse;border-spacing:0;padding:0;vertical-align:top;width:100%"><tbody><tr style="padding:0;vertical-align:top"><th dir="auto" align="left" style="padding:0;background-color:transparent;color:inherit;font-family:helvetica,arial,verdana,sans-serif;font-size:17px;font-weight:normal;line-height:1.5;margin:0;"><table bgcolor="transparent" style="background-color: transparent;border-spacing:0;border-collapse:collapse;padding:0;vertical-align:top;width:100%" width="100%" dir="auto"><tr><td width="100%" height="5" style="font-size:1px; line-height:5px;height:5px;">&nbsp;</td></tr><tr><td style="padding:0 8px 0 8px;padding-left:8px;padding-right:8px;" dir="auto"><div class="dscr" style="color:#555555;margin:0;font-family: helvetica,arial,verdana,sans-serif; font-size: 14px; font-weight:300; line-height: 1.5; overflow:auto;" dir="auto"><span><div style="font-size: 14px; font-family: helvetica,arial,verdana,sans-serif; color: inherit;"><p style="text-align: center;"><strong><span style="font-size: 16px;">Dear ${patientName}</span></strong></p><p style="margin-block-start: 14px;margin-block-end: 14px;">&nbsp;</p><p style="text-align: center;">Thank you very much for making appointment with us on xdtx.org.</p><p style="text-align: center;">Your appointment detail is listed below</p></div></span></div></td></tr><tr><td style="font-size:1px; height:10px" height="10"></td></tr></table></th></tr></tbody></table></th></tr></tbody></table><!--[if (gte mso 9)|(IE)]></td></tr><tr style='padding:0;vertical-align:top'><td dir='auto' style='-moz-hyphens:auto;-webkit-hyphens:auto;Margin:0;border-collapse:collapse!important;color:inherit;font-family:inherit;font-size:1px;font-weight:normal;hyphens:auto;line-height:0;margin:0;padding:0;vertical-align:top;word-wrap:break-word'><![endif]--><table class="row" border="0" cellpadding="0" cellspacing="0" style="border-collapse:collapse; background-color:transparent; mso-table-lspace:0pt;mso-table-rspace:0pt;border-spacing:0;display:table;padding:0;position:relative;vertical-align:top;width:100%;margin:0;"><tbody><tr style="padding:0;vertical-align:top" valign="top"><th valign="top" dir="auto" class="small-12 large-12" style="margin:0 auto;padding:0;width:640px"><table style="border-collapse:collapse;border-spacing:0;padding:0;vertical-align:top;width:100%" width="100%"><tbody><tr style="padding:0;vertical-align:top"><th dir="auto" align="left" style="padding:0;background-color:transparent;color:inherit;font-family:helvetica,arial,verdana,sans-serif;font-size:17px;font-weight:normal;line-height:1.5;margin:0;"><table cellpadding="0" cellspacing="0" border="0" width="100%" style="margin:0;"><tr><td align="center"><hr size="1" width="66%" style="color:#bbbbbb; width: 66%; border-color:#bbbbbb; background-color:#bbbbbb; margin:0; margin-top:17.5px; margin-bottom:17.5px;"></td></tr></table></th></tr></tbody></table></th></tr></tbody></table><!--[if (gte mso 9)|(IE)]></td></tr><tr style='padding:0;vertical-align:top'><td dir='auto' style='-moz-hyphens:auto;-webkit-hyphens:auto;Margin:0;border-collapse:collapse!important;color:inherit;font-family:inherit;font-size:1px;font-weight:normal;hyphens:auto;line-height:0;margin:0;padding:0;vertical-align:top;word-wrap:break-word'><![endif]--><table class="row" border="0" cellpadding="0" cellspacing="0" style="border-collapse:collapse; background-color:transparent; mso-table-lspace:0pt;mso-table-rspace:0pt;border-spacing:0;display:table;padding:0;position:relative;vertical-align:top;width:100%;margin:0;"><tbody><tr style="padding:0;vertical-align:top" valign="top"><th valign="top" dir="auto" class="small-12 large-12 columns" style="margin:0 auto;padding:0;padding-bottom:15px;padding-top:15px;padding-left:50px;padding-right:50px;width:640px"><table style="border-collapse:collapse;border-spacing:0;padding:0;vertical-align:top;width:100%"><tbody><tr style="padding:0;vertical-align:top"><th dir="auto" align="left" style="padding:0;background-color:transparent;color:inherit;font-family:helvetica,arial,verdana,sans-serif;font-size:17px;font-weight:normal;line-height:1.5;margin:0;"><table bgcolor="transparent" style="background-color: transparent;border-spacing:0;border-collapse:collapse;padding:0;vertical-align:top;width:100%" width="100%" dir="auto"><tr><td width="100%" height="5" style="font-size:1px; line-height:5px;height:5px;">&nbsp;</td></tr><tr><td style="padding:0 8px 0 8px;padding-left:8px;padding-right:8px;" dir="auto"><div class="dscr" style="color:#555555;margin:0;font-family: helvetica,arial,verdana,sans-serif; font-size: 14px; font-weight:300; line-height: 1.5; overflow:auto;" dir="auto"><span><div style="text-align: auto;"><ul><li><strong>Name</strong>: ${patientName}</li><li><strong>Contact</strong>: ${patientEmail}</li><li><strong>Gender</strong>：${patientGender}</li><li><strong>Age</strong>：${patientAge}</li><li><strong>Sick</strong>：${patientSick}</li><li><strong>Date</strong>: ${appointmentDate}</li><li><strong>Time</strong>: ${appointmentTime}</li><li><strong>Concern</strong>: ${patientConcern}</li></ul><p style="display:none;"></p><div style="text-align: auto;">&nbsp;</div></div></span></div></td></tr><tr><td style="font-size:1px; height:10px" height="10"></td></tr></table></th></tr></tbody></table></th></tr></tbody></table><!--[if (gte mso 9)|(IE)]></td></tr><tr style='padding:0;vertical-align:top'><td dir='auto' style='-moz-hyphens:auto;-webkit-hyphens:auto;Margin:0;border-collapse:collapse!important;color:inherit;font-family:inherit;font-size:1px;font-weight:normal;hyphens:auto;line-height:0;margin:0;padding:0;vertical-align:top;word-wrap:break-word'><![endif]--><table class="row" border="0" cellpadding="0" cellspacing="0" style="border-collapse:collapse; background-color:transparent; mso-table-lspace:0pt;mso-table-rspace:0pt;border-spacing:0;display:table;padding:0;position:relative;vertical-align:top;width:100%;margin:0;"><tbody><tr style="padding:0;vertical-align:top" valign="top"><th valign="top" dir="auto" class="small-12 large-12" style="margin:0 auto;padding:0;width:640px"><table style="border-collapse:collapse;border-spacing:0;padding:0;vertical-align:top;width:100%" width="100%"><tbody><tr style="padding:0;vertical-align:top"><th dir="auto" align="left" style="padding:0;background-color:transparent;color:inherit;font-family:helvetica,arial,verdana,sans-serif;font-size:17px;font-weight:normal;line-height:1.5;margin:0;"><table cellpadding="0" cellspacing="0" border="0" width="100%" style="margin:0;"><tr><td align="center"><hr size="1" width="66%" style="color:#bbbbbb; width: 66%; border-color:#bbbbbb; background-color:#bbbbbb; margin:0; margin-top:2.5px; margin-bottom:17.5px;"></td></tr></table></th></tr></tbody></table></th></tr></tbody></table><!--[if (gte mso 9)|(IE)]></td></tr><tr style='padding:0;vertical-align:top'><td dir='auto' style='-moz-hyphens:auto;-webkit-hyphens:auto;Margin:0;border-collapse:collapse!important;color:inherit;font-family:inherit;font-size:1px;font-weight:normal;hyphens:auto;line-height:0;margin:0;padding:0;vertical-align:top;word-wrap:break-word'><![endif]--><table class="row" border="0" cellpadding="0" cellspacing="0" style="border-collapse:collapse; background-color:transparent; mso-table-lspace:0pt;mso-table-rspace:0pt;border-spacing:0;display:table;padding:0;position:relative;vertical-align:top;width:100%;margin:0;"><tbody><tr style="padding:0;vertical-align:top" valign="top"><th valign="top" dir="auto" class="small-12 large-12 columns" style="margin:0 auto;padding:0;padding-bottom:15px;padding-top:15px;padding-left:6px;padding-right:6px;width:640px"><table style="border-collapse:collapse;border-spacing:0;padding:0;vertical-align:top;width:100%"><tbody><tr style="padding:0;vertical-align:top"><th dir="auto" align="left" style="padding:0;background-color:transparent;color:inherit;font-family:helvetica,arial,verdana,sans-serif;font-size:17px;font-weight:normal;line-height:1.5;margin:0;"><table bgcolor="transparent" style="background-color: transparent;border-spacing:0;border-collapse:collapse;padding:0;vertical-align:top;width:100%" width="100%" dir="auto"><tr><td width="100%" height="5" style="font-size:1px; line-height:5px;height:5px;">&nbsp;</td></tr><tr><td style="padding:0 8px 0 8px;padding-left:8px;padding-right:8px;" dir="auto"><div class="dscr" style="color:#555555;margin:0;font-family: helvetica,arial,verdana,sans-serif; font-size: 14px; font-weight:300; line-height: 1.5; overflow:auto;" dir="auto"><span><div style="font-size: 14px; font-family: helvetica,arial,verdana,sans-serif; color: inherit;"><p style="text-align: center;">We will let you know as soon as our next expert become available.</p><p style="text-align: center;">Also, please feel free to contact us by directly replying to this email.</p></div></span></div></td></tr><tr><td style="font-size:1px; height:10px" height="10"></td></tr></table></th></tr></tbody></table></th></tr></tbody></table><!--[if (gte mso 9)|(IE)]></td></tr><tr style='padding:0;vertical-align:top'><td dir='auto' style='-moz-hyphens:auto;-webkit-hyphens:auto;Margin:0;border-collapse:collapse!important;color:inherit;font-family:inherit;font-size:1px;font-weight:normal;hyphens:auto;line-height:0;margin:0;padding:0;vertical-align:top;word-wrap:break-word'><![endif]--><table class="row" border="0" cellpadding="0" cellspacing="0" style="border-collapse:collapse; background-color:transparent; mso-table-lspace:0pt;mso-table-rspace:0pt;border-spacing:0;display:table;padding:0;position:relative;vertical-align:top;width:100%;margin:0;"><tbody><tr style="padding:0;vertical-align:top" valign="top"><th valign="top" dir="auto" class="small-12 large-12 columns" style="margin:0 auto;padding:0;padding-bottom:15px;padding-top:15px;padding-left:6px;padding-right:6px;width:640px"><table style="border-collapse:collapse;border-spacing:0;padding:0;vertical-align:top;width:100%"><tbody><tr style="padding:0;vertical-align:top"><th dir="auto" align="left" style="padding:0;background-color:transparent;color:inherit;font-family:helvetica,arial,verdana,sans-serif;font-size:17px;font-weight:normal;line-height:1.5;margin:0;"><table bgcolor="transparent" style="background-color: transparent;border-spacing:0;border-collapse:collapse;padding:0;vertical-align:top;width:100%" width="100%" dir="auto"><tr><td width="100%" height="5" style="font-size:1px; line-height:5px;height:5px;">&nbsp;</td></tr><tr><td style="padding:0 8px 0 8px;padding-left:8px;padding-right:8px;" dir="auto"><div class="dscr" style="color:#555555;margin:0;font-family: helvetica,arial,verdana,sans-serif; font-size: 14px; font-weight:300; line-height: 1.5; overflow:auto;" dir="auto"><span><div style="font-size: 14px; font-family: helvetica,arial,verdana,sans-serif; color: inherit;"><p style="text-align: right;"><em><span style="color: #555555;">We wish you thrive!</span></em></p></div></span></div></td></tr><tr><td style="font-size:1px; height:10px" height="10"></td></tr></table></th></tr></tbody></table></th></tr></tbody></table><!--[if (gte mso 9)|(IE)]></td></tr><tr style='padding:0;vertical-align:top'><td dir='auto' style='-moz-hyphens:auto;-webkit-hyphens:auto;Margin:0;border-collapse:collapse!important;color:inherit;font-family:inherit;font-size:1px;font-weight:normal;hyphens:auto;line-height:0;margin:0;padding:0;vertical-align:top;word-wrap:break-word'><![endif]--><table class="row" border="0" cellpadding="0" cellspacing="0" style="border-collapse:collapse; background-color:transparent; mso-table-lspace:0pt;mso-table-rspace:0pt;border-spacing:0;display:table;padding:0;position:relative;vertical-align:top;width:100%;margin:0;"><tbody><tr style="padding:0;vertical-align:top" valign="top"><th valign="top" dir="auto" class="small-12 large-12 columns" style="margin:0 auto;padding:0;padding-bottom:15px;padding-top:15px;padding-left:6px;padding-right:6px;width:640px"><table style="border-collapse:collapse;border-spacing:0;padding:0;vertical-align:top;width:100%"><tbody><tr style="padding:0;vertical-align:top"><th dir="auto" align="left" style="padding:0;background-color:transparent;color:inherit;font-family:helvetica,arial,verdana,sans-serif;font-size:17px;font-weight:normal;line-height:1.5;margin:0;"><table bgcolor="transparent" style="background-color: transparent;border-spacing:0;border-collapse:collapse;padding:0;vertical-align:top;width:100%" width="100%" dir="auto"><tr><td width="100%" style="padding: 0; text-align:right"><img alt="" border="0" width="84" height="22" style="vertical-align:top; display:inline-block; border:none; outline:0; float:none; clear:both; text-decoration:none; width:84px; margin:0; max-width:84px;" src="https://img.pblc.it/i/950x306x9.f.S3/075b1/xdtxlogo-2267367-1.png" class="small-12 img84x22"></td></tr></table></th></tr></tbody></table></th></tr></tbody></table><!--[if (gte mso 9)|(IE)]></td></tr><tr style='padding:0;vertical-align:top'><td dir='auto' style='-moz-hyphens:auto;-webkit-hyphens:auto;Margin:0;border-collapse:collapse!important;color:inherit;font-family:inherit;font-size:1px;font-weight:normal;hyphens:auto;line-height:0;margin:0;padding:0;vertical-align:top;word-wrap:break-word'><![endif]--><table class="row" border="0" cellpadding="0" cellspacing="0" style="border-collapse:collapse; background-color:transparent; mso-table-lspace:0pt;mso-table-rspace:0pt;border-spacing:0;display:table;padding:0;position:relative;vertical-align:top;width:100%;margin:0;"><tbody><tr style="padding:0;vertical-align:top" valign="top"><th valign="top" dir="auto" class="small-12 large-12 columns" style="margin:0 auto;padding:0;width:640px"><table style="border-collapse:collapse;border-spacing:0;padding:0;vertical-align:top;width:100%"><tbody><tr style="padding:0;vertical-align:top"><th dir="auto" align="left" style="padding:0;background-color:transparent;color:inherit;font-family:helvetica,arial,verdana,sans-serif;font-size:17px;font-weight:normal;line-height:1.5;margin:0;"><table class="spacer" style="border-collapse:collapse;border-spacing:0;padding:0;text-align:left;vertical-align:top;width:100%"><tbody><tr style="padding:0;text-align:left;vertical-align:top"><td height="16" style="-moz-hyphens:auto;-webkit-hyphens:auto;Margin:0;border-collapse:collapse!important;margin:0;mso-line-height-rule:exactly;padding:0;vertical-align:top;">&nbsp;</td></tr></tbody></table><p align="center" style="text-align: center"><a target="_blank" style="text-decoration:none!important;outline:0!important;border:none!important;" href="https://publicate.it/?e=274458"><img width="150" height="21" style="border:none; outline:0; width:150px; margin:0 auto; vertical-align:middle!important;" alt="created in Publicate" src="https://publicate.it/imgs/created_in_publicate.gif"></a></p><table class="spacer" style="border-collapse:collapse;border-spacing:0;padding:0;text-align:left;vertical-align:top;width:100%"><tbody><tr style="padding:0;text-align:left;vertical-align:top"><td height="16" style="-moz-hyphens:auto;-webkit-hyphens:auto;Margin:0;border-collapse:collapse!important;margin:0;mso-line-height-rule:exactly;padding:0;vertical-align:top;">&nbsp;</td></tr></tbody></table></th></tr></tbody></table></th></tr></tbody></table><!--[if (gte mso 9)|(IE)]></td></tr><tr style='padding:0;vertical-align:top'><td dir='auto' style='-moz-hyphens:auto;-webkit-hyphens:auto;Margin:0;border-collapse:collapse!important;color:inherit;font-family:inherit;font-size:1px;font-weight:normal;hyphens:auto;line-height:0;margin:0;padding:0;vertical-align:top;word-wrap:break-word'><![endif]--></td></tr></tbody></table><table width="100%"><tr><td width="100%" height="40"><p style="margin-block-start: 14px;margin-block-end: 14px;">&nbsp;</p></td></tr></table></td></tr></tbody></table></body></html>`,
+                },
+              });
+              this.$message({
+                message: "Appointment succeeded, please check spam box",
+                type: "success",
+              });
+              this.$emit("closeDialog");
+            }
+          } else {
+            this.$$message.warning("请切换至主节点进行付款操作!");
           }
         } catch (error) {
           this.$message.error(error);
         }
       }
-    },
+    }, 5000),
   },
 };
 </script>
@@ -358,15 +393,17 @@ export default {
   box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.15);
   border-radius: 5px;
   box-sizing: border-box;
-  padding: 19px 27px 24px;
+  padding: 19px 0px 24px 27px;
 }
 .form {
-  width: 1032px;
+  width: 1054px;
   display: flex;
   justify-content: space-between;
   margin: 0 auto;
   height: 52px;
   margin-top: 21px;
+  margin-left: 0px;
+  margin-right: 0;
 }
 .name {
   display: inline-block;
@@ -393,18 +430,19 @@ export default {
     width: 100%;
   }
   .el-textarea__inner {
-    width: 94%;
+    width: 100%;
   }
   .borderColor {
     border: 1px solid #ff0000;
   }
   .el-date-editor.el-input,
   .el-date-editor.el-input__inner {
-    width: 100%;
+    width: 80%;
     // margin-left: 29px;
   }
   .el-form-item__content {
     margin-left: 0 !important;
+    margin-right: 20px;
   }
   .el-input--prefix .el-input__inner {
     padding-left: 55px;

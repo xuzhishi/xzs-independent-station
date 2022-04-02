@@ -42,14 +42,14 @@ import Web3 from 'web3'
 Vue.prototype.Web3 = Web3
 
 
-if (window.ethereum) {
-  window.ethereum.enable().then(async (res) => {
-    // alert('当前钱包地址：' + res[0])
-    localStorage.setItem('address', res[0])
-  });
-} else{
-  alert("请安装MetaMask钱包");
-}
+// if (window.ethereum) {
+//   window.ethereum.enable().then(async (res) => {
+//     // alert('当前钱包地址：' + res[0])
+    
+//   });
+// } else{
+//   alert("请安装MetaMask钱包");
+// }
 
 const i18n = new VueI18n({
     locale: 'zh-CN',    // 语言标识

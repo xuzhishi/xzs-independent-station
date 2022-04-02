@@ -34,8 +34,7 @@ export default {
         },
         {
           time: "03-21",
-          content:
-            "华兴资本医疗与生命科技行业周报",
+          content: "华兴资本医疗与生命科技行业周报",
         },
         {
           time: "02-26",
@@ -54,7 +53,7 @@ export default {
   background: rgba(196, 196, 196, 0.3);
   position: relative;
   .developments-center {
-    width: 1100px;
+    width: 60%;
     position: absolute;
     top: 50%;
     left: 50%;

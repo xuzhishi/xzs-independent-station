@@ -1,26 +1,25 @@
 <template lang="pug">
 div
-  .banner
-    .block
-      span.demonstration 
-        el-carousel(
-          trigger="click",
-          height="150px",
-          arrow="always",
-          :autoplay="false"
-        )
-          el-carousel-item(v-for="item in 2", :key="item")
-            .banner-left
-              .title XDTX Metaverse
-              .subTitle {{ $t('home.bannerTitle') }}
-              .btn(@click="learnMoreClick") {{ $t('home.bannerBth') }}
-    .technical-introduction
-      dl(v-for="item in bannerContent")
-        //- dt
-        //-   img(:src="item.imgUrl")
-        dd
-          h5 {{ item.title }}
-          p {{ item.content }}
+  .home-banner
+    .banner
+      .block
+        span.demonstration 
+          el-carousel(
+            trigger="click",
+            height="150px",
+            arrow="always",
+            :autoplay="false"
+          )
+            el-carousel-item(v-for="item in 2", :key="item")
+              .banner-left
+                .title XDTX Metaverse
+                .subTitle 元宇宙世界的精神心理医疗
+                .btn(@click="learnMoreClick") {{ $t('home.bannerBth') }}
+      .technical-introduction
+        dl(v-for="item in bannerContent")
+          dd
+            h5 {{ item.title }}
+            p {{ item.content }}
 </template>
 
 <script>
@@ -56,19 +55,29 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+// .banner:before {
+//   content: "";
+//   display: block;
+//   padding-top: 18%;
+//   box-sizing: border-box;
+// }
 ::v-deep .banner {
   width: 100%;
-  height: 828px;
+  height: 1195px;
   background: url("./../../assets/image/home__banner__new.jpg") no-repeat;
-  background-size: 100% 968px;
+  background-size:cover;
   overflow: hidden;
   margin-top: -80px;
+  box-sizing: border-box;
+  // padding-bottom: 22%;
+  // position: relative;
   .el-carousel--horizontal {
-    width: 1108px;
-    height: 200px;
+    width: 60%;
+    height: 230px;
     background-color: rgba(0, 0, 0, 0);
-    margin-top: 310px;
-    margin-left: 359px;
+    margin: 0 auto;
+    margin-top: 398px;
+    // background: pink;
     .el-carousel__indicators--horizontal {
       display: none;
     }
@@ -78,17 +87,18 @@ export default {
     }
     .el-carousel__item:nth-child(2n) {
       background-color: rgba(0, 0, 0, 0);
-      height: 200px;
+      height: 230px;
     }
     .el-carousel__item:nth-child(2n + 1) {
       background-color: rgba(0, 0, 0, 0);
-      height: 200px;
+      height: 230px;
     }
     .el-carousel__item {
       .banner-left {
         text-align: left;
         // margin-top: 260px;
         margin-left: 100px;
+        position: relative;
         .title {
           font-family: Arial;
           font-weight: bold;
@@ -97,14 +107,12 @@ export default {
           color: #393837;
         }
         .subTitle {
-          font-family: Microsoft YaHei UI;
-          font-weight: bold;
-          font-size: 20px;
-          line-height: 25px;
-          display: flex;
-          align-items: center;
-          text-transform: uppercase;
+          font-family: "Microsoft YaHei UI";
+          font-weight: 700;
+          font-size: 48px;
+          line-height: 61px;
           color: #393837;
+          margin-top: 10px;
         }
         .btn {
           width: 122px;
@@ -120,18 +128,23 @@ export default {
           line-height: 37px;
           margin-top: 65px;
           cursor: pointer;
+          position: absolute;
+          z-index: 20;
         }
       }
     }
   }
+
   .technical-introduction {
     width: 1198px;
     height: 305px;
     background: #ffffff;
-    margin-top: 13px;
+    margin-top: 356px;
     display: flex;
     box-sizing: border-box;
     padding-left: 420px;
+    // position: absolute;
+    // bottom: 0;
     dl {
       width: 216px;
       height: 200px;

@@ -59,7 +59,7 @@ export default {
   box-sizing: border-box;
   .bottom-center {
     display: flex;
-    width: 1100px;
+    width: 60%;
     justify-content: space-between;
     box-sizing: border-box;
     margin: 50px auto;

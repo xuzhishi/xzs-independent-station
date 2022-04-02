@@ -109,7 +109,6 @@ export default {
               const address = localStorage.getItem("address");
               const userList = await getUserInfo(address);
               this.formInfo = userList.data[0].result[0];
-              console.log(this.formInfo);
               if (this.formInfo !== null) {
                 this.form.name = this.formInfo.name;
                 this.form.age = this.formInfo.age;
@@ -159,28 +158,38 @@ export default {
       this.$cookie.set("expires", this.expiretime);
     },
     // 登录确定按钮
-    confirmHandleClick() {
+    async confirmHandleClick() {
       this.centerDialogVisible = false;
       if (window.ethereum) {
         window.ethereum.enable().then(async (res) => {
-          this.loginService(res[0]);
-          const db = getFirestore();
-          const docRef = doc(db, "user", res[0]);
-          const docSnap = await getDoc(docRef);
+          var result = await login(res[0]);
+          if (result.status === 200) {
+            this.token = result.data[0].result.token;
+            this.createtime = result.data[0].result.createtime;
+            this.expiretime = result.data[0].result.expiretime;
+            this.$cookie.set("token", this.token);
+            this.$cookie.set("expires", this.expiretime);
+
+            const db = getFirestore();
+            const docRef = doc(db, "user", res[0]);
+            const docSnap = await getDoc(docRef);
             if (
               docSnap.data().expiretime < new Date().getTime() ||
               docSnap.data().token !== this.$cookie.get("token") ||
               docSnap.data().expiretime !== this.$cookie.get("expires")
             ) {
-              this.loginService(res[0]);
-              this.$message.success("登录成功");
+              var result = await login(res[0]);
+              if (result.status === 200) {
+                this.$message.success("登录成功");
                 this.show = false;
                 this.userShow = true;
+              }
             } else {
               this.$message.success("登录成功");
               this.show = false;
               this.userShow = true;
             }
+          }
         });
       } else {
         alert("请安装MetaMask钱包");
@@ -202,7 +211,7 @@ export default {
     rgba(255, 255, 255, 0.19) 33.14%
   );
   .listen-voice {
-    width: 1100px;
+    width: 60%;
     height: 556px;
     margin: 0 auto;
     display: flex;

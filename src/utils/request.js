@@ -1,6 +1,9 @@
 import axios from "axios"
 // 创建axios 赋值给常量service
-const service = axios.create();
+const service = axios.create({
+  // baseURL:"/api",
+  // timeout:5000
+});
 
 // 添加请求拦截器（Interceptors）
 service.interceptors.request.use(function (config) {

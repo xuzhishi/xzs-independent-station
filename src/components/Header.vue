@@ -24,9 +24,9 @@ export default {
 
 <style lang="scss" scoped>
 .isc-header {
-  width: 1200px;
+  width: 59%;
   display: flex;
-  justify-content: space-around;
+  justify-content: space-between;
   background: rgba(0, 0, 0, 0);
   margin: 0 auto;
   position: relative;

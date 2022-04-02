@@ -9,11 +9,11 @@
   },
   "dependencies": {
     "axios": "^0.25.0",
-    "bn.js": "^5.2.0",
     "core-js": "^3.6.5",
     "element-ui": "^2.15.6",
     "firebase": "^9.6.7",
     "iview": "^3.5.4",
+    "lodash": "^4.17.21",
     "mockjs": "^1.1.0",
     "vue": "^2.6.11",
     "vue-cookie": "^1.1.4",
