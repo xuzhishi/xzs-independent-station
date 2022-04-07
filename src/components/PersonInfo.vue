@@ -210,7 +210,7 @@ export default {
   }
   .person-logo {
     position: relative;
-    top: 15px;
+    top: 4px;
     // left: 40px;
     width: 25px;
     height: 25px;

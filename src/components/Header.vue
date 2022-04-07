@@ -30,5 +30,8 @@ export default {
   background: rgba(0, 0, 0, 0);
   margin: 0 auto;
   position: relative;
+  z-index: 5;
+  // position: absolute;
+  // z-index: 9999;
 }
 </style>

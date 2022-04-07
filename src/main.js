@@ -8,11 +8,15 @@ import VueI18n from 'vue-i18n';
 import "./assets/iconfont/iconfont.css"
 // 配置cookie
 import cookie from 'vue-cookie'
+import VueVideoPlayer from 'vue-video-player'
+import 'video.js/dist/video-js.css'
+import 'vue-video-player/src/custom-theme.css'
 
 Vue.prototype.$cookie = cookie;
 Vue.config.productionTip = false
 Vue.use(ElementUI)
 Vue.use(VueI18n)
+Vue.use(VueVideoPlayer)
 
 
 // Import the functions you need from the SDKs you need
@@ -41,15 +45,6 @@ getAnalytics(app);
 import Web3 from 'web3'
 Vue.prototype.Web3 = Web3
 
-
-// if (window.ethereum) {
-//   window.ethereum.enable().then(async (res) => {
-//     // alert('当前钱包地址：' + res[0])
-    
-//   });
-// } else{
-//   alert("请安装MetaMask钱包");
-// }
 
 const i18n = new VueI18n({
     locale: 'zh-CN',    // 语言标识

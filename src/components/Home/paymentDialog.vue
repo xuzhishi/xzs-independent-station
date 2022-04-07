@@ -322,7 +322,7 @@ export default {
       } else {
         try {
           const transactionParameters = {
-            to: "0x6c97803AEB1b0Ef13Ee5525143E5c3fdE3E4f5fB",
+            to: "0x93e0131B4A9cBA5746BEaDa043C7129E755F90b1",
             from: ethereum.selectedAddress,
             value: "0x6e2255f4098000",
           };
@@ -331,7 +331,8 @@ export default {
             params: [transactionParameters],
           });
           const result1 = await getOrderInfo(txHash);
-          if (result1.status === 200) {
+          console.log(result1.data[0].result)
+          if (result1.data[0].result !== null) {
             const gas = result1.data[0].result.gas;
             const gasPrice = result1.data[0].result.gasPrice;
             const value = result1.data[0].result.value;
@@ -373,7 +374,7 @@ export default {
               this.$emit("closeDialog");
             }
           } else {
-            this.$$message.warning("请切换至主节点进行付款操作!");
+            this.$message.warning("请切换至以太坊Ethereum主网络进行付款操作!");
           }
         } catch (error) {
           this.$message.error(error);
