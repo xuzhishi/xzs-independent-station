@@ -1,54 +1,123 @@
 <template lang="pug">
 div
   .recruitment
-    h2 招募成员架构
+    h2 Recruitment Structure
     .block
       img(src="./../../assets/image/member.jpg")
       .block-right
-        .small-block(v-for="item in memberList")
+        .small-block(
+          v-for="(item, index) in memberList",
+          @click="goDetail(index)",
+          :class="backIndex == index ? 'back' : ''"
+        )
           h4 {{ item.title }}
           p {{ item.subTitle }}
           .arrow
           img(src="./../../assets/image/member-right.png")
+    //- :style="{display: activeIndex==idx ? 'none':''}"
+    .expandBlock(
+      v-for="(item, idx) in expandList",
+      :class="[currentIndex == idx ? 'current' : '', activeIndex == idx ? 'active' : '']",
+      @click="goBack(idx)"
+    )
+      h4 {{ item.title }}
+      p {{ item.content1 }}
+      p {{ item.content2 }}
+      p {{ item.content3 }}
+      p.iconfont.icon-xiangzuojiantou
 </template>
 
 <script>
 export default {
   data() {
     return {
-      memberList: [
+      expandList: [
         {
-          title: "国际专业类人员",
-          subTitle:
-            "我们在国际上招聘的工作人员在世界各地担任卫生技术、业务、管理和领导职务。他们具有流动性，并根据他们的专长和元宇宙医院的规划需要受雇开展工作。",
+          title: "International Professionals",
+          content1:
+            "Our internationally recruited staff serve in health technical, operational, managerial and leadership roles, across the world. They are committed to mobility and are employed to work according to their expertise and the programmatic needs of Metaverse Hospital.",
         },
         {
-          title: "一般事务类人员",
-          subTitle:
-            "我们的规划和专业人员由当地居民或国民提供支持，这些人受雇形成一般事务类人员类别。他们对于我们的成功至关重要，具有范围广泛的技能，并且受到我们整个组织各个团队的重视。",
+          title: "General Service Staff ",
+          content1:
+            "Our programs and professional staff are supported by local residents or nationals, employed in the general service staff category. Supposed to have a wide range of skills, they are essential for our success, and are valued by teams across our organization.",
         },
         {
-          title: "顾问及其它合同安排",
-          subTitle:
-            "元宇宙医院与主题事项专家签订合同，由他们提供时间有限、针对特定项目的专业水平支持，以实现具体规划的可交付成果。这些合同不是雇用合同，不属于元宇宙医院《职员细则》和《人事条例》的...",
+          title: "Consultants and Other Contractual Arrangements ",
+          content1:
+            "Metaverse Hospital Organization contracts subject matter experts to provide time-limited, project-focused professional level support to attain specific program deliverables. These are not employment contracts and remain outside the scope of our Staff Rules and Regulations.",
+          content2:
+            "Metaverse Hospital Organization staff can apply to fixed term or temporary appointments and successful candidates will receive an attractive salary and benefits package. Some staff are part of our agile workforce mobility program and all staff are employed under Metaverse Hospital Organization’s Rules and Regulations,Depending on your duty station, you may benefit from different health and well-being programs and services.Metaverse Hospital Organization has opportunities at different levels of responsibility and experience. We seek motivated individuals in all categories of work that meet our educational and work experience requirements.Metaverse Hospital Organization also advertises other contractual arrangements for specific program needs and offers competitive rates.",
         },
         {
-          title: "初级专业干事规划",
-          subTitle:
-            "初级专业干事（JPO）规划使年轻专业人员能够在职业生涯的早期阶段获得多边技术合作的实践经验。元宇宙医院组织欢迎初级专业干事参加国家办事处、区域办事处和总部卫生技术和行政领域的工作。",
+          title: "Junior Professional Officer Program ",
+          content1:
+            "The Junior Professional Officer (JPO) Program provides young professionals an exceptional opportunity to acquire hands-on experience in MTC at an early stage of their careers. Metaverse Hospital Organization welcomes JPOs to participate in the field of health technology and administration in regional and country offices, and at headquarters.workforce that serves vulnerable populations and contributes to the promotion of world health and the maintenance of world security in order to achieve our goal of ”three billion“. As a JPO, you will embark on an exciting career with the Metaverse Hospital Organization. We will fully support your growth and development along the way.",
+          content2:
+            "The JPO program is sponsored by donor governments. Usually, these governments only sponsor citizens of their countries, but in some cases, a few countries sponsor nationals from developing countries. To be eligible, you must be a national of a donor country (except for developing country candidates), be under the age of 32, have an advanced university degree, and have at least two years of relevant work experience. Information on the JPO Program application process and other aspects can be found on the website of the Metaverse Medical Industry Organization UNDP JPO Service Center.",
         },
         {
-          title: "申请成为初级专业干事",
-          subTitle:
-            "元宇宙医院组织实习生规划，面向未来的公共卫生领导者。为了推进全球卫生目标，每个卫生系统必须有一支有能力和活力的卫生人力队伍作为其核心。各国需要一批训练有素、熟悉卫生部门各系统和流...",
+          title: "Application to become a Junior Professional Officer",
+          content1:
+            "Metaverse Hospital Organization Internship Program is geared toward future public health leaders. To advance global health goals, a competent and dynamic health workforce at the heart of each health system is essential. Countries need a pool of health professionals trained and exposed to the systems and processes in the health sector and who understand how stakeholders interact within the international health arena.Metaverse Hospital Organization, as the leader in global public health issues, is committed to building a diverse pool of future leaders in public health. Our Internship Program offers a wide range of opportunities for students and recent graduates to gain insight into the technical and administrative program of Metaverse Hospital Organization and enrich their knowledge and experience in various areas, thereby contributing to the advancement of public health.",
         },
         {
-          title: "全球的医师招募条件",
-          subTitle:
-            "1、接受过Medical education in the United States系统训练，拥有国际医学教育学位而且取得在各州执业许可的人员（包括经过美国医师执照考试（USMLE）合格者）...",
+          title: "Global physician recruitment requirements",
+          content1:
+            "1. Those who have received systematic training in medical education in the United States, have an international medical education degree and are licensed to practice in each state. ( including those who have passed the United States Medical Licensing Examination (USMLE)).",
+          content2:
+            "2. Those who have physician status from the Society of Internal Medicine, or with a medical degree (M.D.), or with a Bachelor of Osteopathic Medicine (D.O.). ",
+          content3: "3. Those who have done residency.",
         },
       ],
+      memberList: [
+        {
+          title: "International Professionals",
+          subTitle:
+            "Our internationally recruited staff serve in health technical, operational, managerial and leadership roles, across the world. They...",
+        },
+        {
+          title: "General Service Staff ",
+          subTitle:
+            "Our programs and professional staff are supported by local residents or nationals, employed in the general service staff category. Supposed to have...",
+        },
+        {
+          title: "Consultants and Other Contractual Arrangements ",
+          subTitle:
+            "Metaverse Hospital Organization contracts subject matter experts to provide time-limited, project-focused...",
+        },
+        {
+          title: "Junior Professional Officer Program ",
+          subTitle:
+            "The Junior Professional Officer (JPO) Program provides young professionals an exceptional opportunity to acquire hands-on...",
+        },
+        {
+          title: "Application to become a Junior Professional Officer",
+          subTitle:
+            "Metaverse Hospital Organization Internship Program is geared toward future public health leaders. To advance...",
+        },
+        {
+          title: "Global physician recruitment requirements",
+          subTitle:
+            "1. Those who have received systematic training in medical education in the United States, have an international...",
+        },
+      ],
+      currentIndex: -1,
+      activeIndex: -1,
+      backIndex: 0,
     };
+  },
+  methods: {
+    goDetail(idx) {
+      this.activeIndex = -1;
+      this.backIndex = 0;
+      this.currentIndex = idx;
+    },
+    goBack(index) {
+      this.activeIndex = index;
+      this.backIndex = index;
+      this.currentIndex = -1;
+    },
   },
 };
 </script>
@@ -59,6 +128,7 @@ export default {
   height: 963px;
   background-color: rgba(196, 196, 196, 0.3);
   overflow: hidden;
+  position: relative;
   h2 {
     font-family: "Microsoft YaHei UI";
     font-weight: 400;
@@ -66,6 +136,49 @@ export default {
     text-align: center;
     color: #393837;
     margin-top: 52px;
+  }
+  .expandBlock {
+    height: 459px;
+    width: 695px;
+    border-radius: 15px;
+    background: #fff;
+    overflow: hidden;
+    box-sizing: border-box;
+    padding: 0 20px;
+    display: none;
+    margin-left: 822px;
+    position: absolute;
+    z-index: 999;
+    top: 224px;
+    h4 {
+      margin-top: 30px;
+      margin-bottom: 20px;
+    }
+    p {
+      text-align: left;
+      font-family: "Microsoft YaHei UI";
+      font-weight: 400;
+      font-size: 14px;
+      line-height: 18px;
+      color: #393837;
+      margin-bottom: 20px;
+    }
+  }
+  .iconfont {
+    position: absolute;
+    bottom: 0px;
+    right: 20px;
+  }
+  .icon-xiangzuojiantou {
+    font-size: 15px;
+    font-weight: bold;
+    color: #4e9cf8 !important;
+  }
+  .current {
+    display: block;
+  }
+  .active {
+    display: none;
   }
   .block {
     width: 1200px;
@@ -82,26 +195,27 @@ export default {
       .small-block:nth-of-type(1) {
         margin-bottom: 10px;
       }
-      .small-block:nth-of-type(6) {
-        background-color: #4e9cf8;
-        position: relative;
-        h4,
-        p {
-          color: #fff;
-        }
-        img {
-          display: none;
-        }
-        .arrow {
-          width: 9px;
-          height: 15px;
-          background: url("./../../assets/image/member-right-last.png");
-          position: absolute;
-          bottom: 10px;
-          right: 21px;
-          cursor: pointer;
-        }
-      }
+      // .small-block:nth-of-type(1) {
+
+      //   background-color: #4e9cf8;
+      //   position: relative;
+      //   h4,
+      //   p {
+      //     color: #fff;
+      //   }
+      //   img {
+      //     display: none;
+      //   }
+      //   .arrow {
+      //     width: 9px;
+      //     height: 15px;
+      //     background: url("./../../assets/image/member-right-last.png");
+      //     position: absolute;
+      //     bottom: 10px;
+      //     right: 21px;
+      //     cursor: pointer;
+      //   }
+      // }
       .small-block {
         width: 224px;
         height: 224px;
@@ -111,6 +225,7 @@ export default {
         box-sizing: border-box;
         padding: 0 21px;
         position: relative;
+        cursor: pointer;
         h4 {
           font-family: "Microsoft YaHei UI";
           font-weight: 700;
@@ -126,6 +241,26 @@ export default {
           color: #393837;
         }
         img {
+          position: absolute;
+          bottom: 10px;
+          right: 21px;
+          cursor: pointer;
+        }
+      }
+      .back {
+        background-color: #4e9cf8 !important;
+        position: relative;
+        h4,
+        p {
+          color: #fff;
+        }
+        img {
+          display: none;
+        }
+        .arrow {
+          width: 9px;
+          height: 15px;
+          background: url("./../../assets/image/member-right-last.png");
           position: absolute;
           bottom: 10px;
           right: 21px;

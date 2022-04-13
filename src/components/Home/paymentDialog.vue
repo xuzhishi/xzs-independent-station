@@ -1,14 +1,14 @@
 <template lang="pug">
 div
   el-dialog(
-    title="付款信息",
+    title="Payment information",
     :visible.sync="appointmentVisible",
     center,
     :before-close="handleDialogClose"
   )
     div
       .personalInformation
-        .title 个人信息
+        .title Personal Information
         el-form.form(:model="form", ref="ruleForm", label-width="100px")
           el-form-item(label="", :label-width="formLabelWidth", prop="name")
             el-input.input(
@@ -17,7 +17,7 @@ div
               clearable,
               @blur="nameLeave"
             )
-              span.name(slot="prefix") 姓名：
+              span.name(slot="prefix") Name：
           el-form-item(label="", :label-width="formLabelWidth", prop="name")
             el-select(
               v-model="form.gender",
@@ -43,7 +43,7 @@ div
               clearable,
               @blur="ageLeave"
             )
-              span.name(slot="prefix") 年龄：
+              span.name(slot="prefix") Age：
           el-form-item(label="", :label-width="formLabelWidth", prop="name")
             el-input(
               v-model="form.email",
@@ -51,9 +51,9 @@ div
               clearable,
               @blur="emailLeave"
             )
-              span.name(slot="prefix") 邮箱：
+              span.name(slot="prefix") Email：
       .select-disease
-        .title 选择疾病
+        .title Select Disease
         ul
           li.line1
             span(
@@ -81,14 +81,13 @@ div
         el-input.textarea(
           type="textarea",
           :rows="4",
-          placeholder="备注：请描述你的症状及就诊经历，医生将竭诚为你治疗，并保证你的隐私安全",
+          placeholder="Note:Please describe your symptoms and hospital experience. You’ll be served wholeheartedly and your privacy security will be ensured.",
           v-model="textarea",
           maxlength="400",
           show-word-limit
         )
-          span.name(slot="prefix") 备注：
       .select-time
-        .title 选择时间段
+        .title Select Time
         el-form.time(:model="form", ref="ruleForm", label-width="100px")
           el-form-item(label="", :label-width="formLabelWidth", prop="time")
             el-date-picker(
@@ -105,7 +104,7 @@ div
             el-select(
               v-model="time",
               clearable,
-              placeholder="请选择时间段",
+              placeholder="Please select time",
               :class="{ borderColor: inputTimeDateShow }",
               style="margin-left: -20px; width: 230px",
               @change="timeDateLeave"
@@ -118,11 +117,11 @@ div
               )
     span.dialog-footer(slot="footer")
       .reservationFee
-        .footer-name 预约费用
+        .footer-name Appointment Fee
         .footer-price
           span.fee 0.031 Ether
           span.price {{ `($${exchangeRate.toFixed(5)})` }}
-      .payment(@click="paymentClick") 确认支付
+      .payment(@click="paymentClick") Confirm Payment
 </template>
 
 <script>
@@ -145,11 +144,11 @@ export default {
       options: [
         {
           value: "0",
-          label: "男",
+          label: "male",
         },
         {
           value: "1",
-          label: "女",
+          label: "female",
         },
       ],
       timeList: [
@@ -331,7 +330,7 @@ export default {
             params: [transactionParameters],
           });
           const result1 = await getOrderInfo(txHash);
-          console.log(result1.data[0].result)
+          console.log(result1.data[0].result);
           if (result1.data[0].result !== null) {
             const gas = result1.data[0].result.gas;
             const gasPrice = result1.data[0].result.gasPrice;

@@ -209,11 +209,13 @@ export default {
     margin-top: 10px;
   }
   .person-logo {
-    position: relative;
-    top: 4px;
-    // left: 40px;
-    width: 25px;
-    height: 25px;
+    margin-left: 100px;
+    margin-top: 10px;
+    // position: relative;
+    // top: 4px;
+    // // left: 40px;
+    // width: 25px;
+    // height: 25px;
     cursor: pointer;
   }
 }

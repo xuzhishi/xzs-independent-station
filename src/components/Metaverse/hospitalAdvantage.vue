@@ -1,7 +1,7 @@
 <template lang="pug">
 div
   .advantage
-    h4 医院优势
+    h4 Advantages of Hela Central Hospital
     .advantage-advantageList
       .list(v-for="item in advantageList")
         h5 {{ item.title }}
@@ -14,20 +14,20 @@ export default {
     return {
       advantageList: [
         {
-          title: "地点不限",
-          content: "无论身在何地都可以轻松来到海拉医院",
+          title: "Without Geographic Restriction",
+          content: "Easy access to the Hospital from anywhere",
         },
         {
-          title: "沉浸度高",
-          content: "虚拟场景逼真，沉浸度高",
+          title: "Highly Sense of Immersion",
+          content: "Lifelike virtual scenes with highly immersive experience",
         },
         {
-          title: "安全舒适 ",
-          content: "可坐可躺，安全舒适",
+          title: "Safety and Comfort",
+          content: "Free to sit or lie down, safe and comfortable",
         },
         {
-          title: "医生预约",
-          content: "全球范围内医师进行线上坐诊",
+          title: "Doctor Appointment",
+          content: "Online counseling by doctors from all over the world",
         },
       ],
     };
@@ -52,16 +52,16 @@ export default {
   .advantage-advantageList {
     display: flex;
     justify-content: space-between;
-    width: 1038px;
+    width: 1200px;
     margin: 100px auto;
     font-family: "Microsoft YaHei UI";
     font-weight: 700;
     font-size: 14px;
     line-height: 18px;
     color: #393837;
-    p{
-        font-weight: normal;
-        margin-top: 20px;
+    p {
+      font-weight: normal;
+      margin-top: 20px;
     }
   }
 }

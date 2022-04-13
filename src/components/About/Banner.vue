@@ -1,10 +1,10 @@
 <template lang="pug">
 div
   .banner 
-    h2 虚之实科技公司创立的意义
+    h2 Significance of the founding of XDTX
     .block
-      h3.block-title 为全球创造“认知高质量生命”！
-    p 我们将以元宇宙为依托，以数据为燃料，持续为医生提供更好的解决方案，减负增效，为10亿人提供“认知高质量生命”，帮助人类拓展生命的数字维度。
+      h3.block-title contribute life with higher cognitive level to the world！
+    p With Metaverse as foundation and data as fuel, we’ll continue to provide doctors with better solutions to reduce their burden and increase efficiency.Provide one billion people with "high-quality cognitive life" and help to expand human beings’ digital dimension of life.
 </template>
 
 <script>

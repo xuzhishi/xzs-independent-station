@@ -13,7 +13,7 @@ div
         .banner
           .banner-left
             .title XDTX Metaverse
-            .subTitle 元宇宙世界的精神心理医疗
+            .subTitle Psychotherapy in the Metaverse
             .btn(@click="learnMoreClick") {{ $t('home.bannerBth') }}
           .technical-introduction
             dl(v-for="item in bannerContent")
@@ -43,18 +43,20 @@ export default {
         {
           imgUrl: "",
           title: "WEB3.0",
-          content: "为患者线上就诊涉及到的 隐私安全提供了强力保障",
-        },
-        {
-          imgUrl: "",
-          title: "XR技术",
           content:
-            "突破次元壁，将医院的空间容量无限扩容 每位患者居家即可完成分诊、候诊和治疗",
+            "Provide strong guarantee for patients’ privacy security involved in online counseling",
         },
         {
           imgUrl: "",
-          title: "远程在线",
-          content: "我们将在全球范围内招募 有从医资格的医师进行线上坐诊",
+          title: "XR Technology",
+          content:
+            "Break through the space and capacity limitation of a physical hospital, allowing triag, waiting and treatment to be processed at home",
+        },
+        {
+          imgUrl: "",
+          title: "Distance Online Counseling",
+          content:
+            "We will recruit qualified doctors worldwide to see patients online",
         },
       ];
     },
@@ -102,10 +104,10 @@ export default {
   }
   .el-carousel__arrow--left {
     // margin-top: 36px;
-    margin-left: 359px;
+    margin-left: 19%;
   }
   .el-carousel__arrow--right {
-    margin-right: 359px;
+    margin-right: 19%;
   }
   .el-carousel__item:nth-child(2n) {
     // background-color: rgba(0, 0, 0, 0);

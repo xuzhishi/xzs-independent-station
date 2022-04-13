@@ -1,12 +1,12 @@
 <template lang="pug">
 div
   .email
-    h5 请给我们发送电子邮件
+    h5 Please send us an email
     .banner
       .address
         img(src="./../../assets/image/email.png")
         span contact@xdtx.org
-      p 其中应写明您想申请的职务类别和个人介绍，并附上您的职业许可及专业证书
+      p It should indicate the job category and personal introduction you want to apply for, and attach your professional license and professional certificate
 </template>
 
 <script>

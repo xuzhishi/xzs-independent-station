@@ -31,7 +31,5 @@ export default {
   margin: 0 auto;
   position: relative;
   z-index: 5;
-  // position: absolute;
-  // z-index: 9999;
 }
 </style>

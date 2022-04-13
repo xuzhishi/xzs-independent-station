@@ -2,9 +2,9 @@
 div
   .introduce
     .block
-      p 我们寻求有才华的专业人士，他们应希望作为我们元宇宙医院国际队伍的成员，为这一重要使命作出贡献。
-      p 我们致力于实现多样化、多元文化和性别均衡的人力队伍，员工来自全球各地，具有广泛的代表性。
-      p 我们的价值观，我们的DNA始终以公共卫生服务为己任，致力于卓越卫生成就的专业工作者，廉正诚信、精诚合作、互助互爱
+      p We are looking for talented professionals to join our international team of the Metaverse hospital and contribute to this great mission.
+      p We are committed to building a diverse, multicultural and gender-balanced team of which members from all over the world are broadly representative.
+      p Our values and our DNA have always taken public health service as our own responsibility. We are professional and dedicated to outstanding health care achievements, honesty and integrity, sincere cooperation, mutual assistance and mutual love.
 </template>
 
 <script>

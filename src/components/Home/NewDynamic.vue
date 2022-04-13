@@ -3,18 +3,18 @@ div
   .latest-developments
     .developments-center
       .developments-left
-        h5.title 新闻中心
+        h5.title News Center
         .content-1
           p.time 03-24
-          p.content 国家精准医学产业创新中心揭牌
+          p.content The inauguration of National Precision Medicine Industry Innovation Center
         .content-2
-          p 3月 23日，国家精准医学产业创新中心揭牌仪式在成都天府国 际生物城举行，这标志着四川省首个国家级产业创新中......
+          p On March 23, the opening ceremony of National Precision Medicine Industry Innovation Center was held in Chengdu Tianfu International Bio-town, marking the first national industrial innovation center in Sichuan Province........
         img(src="@/assets/image/new__center.jpg")
-        .btn 了解更多
+        .btn Learn more
       .developments-right
         h2 
-          span 最新
-          span.dynamic 动态
+          span new
+          span.dynamic in the company
         .line
         .describe(v-for="item in lastedDevelopents")
           .describe-content
@@ -30,15 +30,18 @@ export default {
       lastedDevelopents: [
         {
           time: "04-05",
-          content: "我国医疗器械产业发展现状及思考",
+          content:
+            "Current Situation and Reflections on the Development of China's Medical Equipment Industry",
         },
         {
           time: "03-21",
-          content: "华兴资本医疗与生命科技行业周报",
+          content:
+            "China Renaissance Healthcare & Life Sciences Sector Weekly Report",
         },
         {
           time: "02-26",
-          content: "数字医生推动医疗高质量发展 数坤科技引领全球AI医疗创新",
+          content:
+            "Digital doctors raise the quality of healthcare development,Shukun Technology leads global AI healthcare innovation",
         },
       ],
     };
@@ -85,6 +88,7 @@ export default {
           line-height: 20px;
           color: #393837;
           margin-top: 10px;
+          width: 374px;
         }
       }
       .content-2 {
@@ -154,7 +158,7 @@ export default {
             line-height: 18px;
             color: #393837;
             position: relative;
-            top: -10px;
+            top: 3px;
             left: 52px;
           }
         }

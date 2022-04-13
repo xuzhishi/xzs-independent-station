@@ -5,10 +5,10 @@ div
       .listen-left
         .left-title
           span.line
-          span.listen 倾听
+          span.listen Listening to the
         .left-subTitle
-          h5 找到你的医生
-          h4 心灵的声音
+          h5 Find your doctor
+          h4 voice of the mind
         .left-content
           .content(v-for="item in listenContent")
             p(v-html="item")
@@ -73,8 +73,8 @@ export default {
   computed: {
     listenContent() {
       return [
-        "海拉医院为全球的患者提供平等就医的机会。<br /> 在Web3.0+XR技术的医疗服务体系上，所有人都是一个匿名实体，<br /> 所有人都将一视同仁，提供最普惠的医疗帮助。",
-        "在预约医生成功后请前往元宇宙海拉医院。<br /> 你可以在元宇宙世界与医生面对面交谈。",
+        "Hela Central Hospital provides equal access for global patients.<br /> In Web 3.0 + XR Technology healthcare delivery system, each one is an anonymous entity.<br /> All will be treated equally and enjoy medical service benefiting the great majority of people.",
+        "After a successful appointment, please go visit Hela Central <br /> Hospital and have a face to face conversation with the doctor in the Metaverse.",
       ];
     },
   },
@@ -218,7 +218,7 @@ export default {
     justify-content: space-between;
     .listen-left {
       .left-title {
-        width: 475px;
+        width: 592px;
         // margin-left: 176px;
         margin-top: 150px;
         text-align: left;
@@ -231,7 +231,7 @@ export default {
         .listen {
           font-family: "Microsoft YaHei UI";
           font-weight: 700;
-          font-size: 48px;
+          font-size: 40px;
           line-height: 61px;
           color: #4e9cf8;
           position: relative;
@@ -242,14 +242,14 @@ export default {
       .left-subTitle {
         display: flex;
         justify-content: space-between;
-        width: 477px;
+        width: 592px;
         margin-top: 20px;
         // margin-left: 176px;
         margin-bottom: 26px;
         h5 {
           font-family: "Microsoft YaHei UI";
           font-weight: 700;
-          font-size: 18px;
+          font-size: 16px;
           line-height: 23px;
           color: #393837;
           margin-top: 24px;
@@ -257,13 +257,13 @@ export default {
         h4 {
           font-family: "Microsoft YaHei UI";
           font-weight: 700;
-          font-size: 48px;
+          font-size: 40px;
           line-height: 61px;
           color: #4e9cf8;
         }
       }
       .left-content {
-        width: 475px;
+        width: 592px;
         height: 200px;
         // margin-left: 176px;
         .content {

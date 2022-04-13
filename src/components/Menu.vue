@@ -20,7 +20,7 @@
       >XDTX Metaverse</el-menu-item
     >
     <el-menu-item index="/recruitment" @click="routeToClick('/recruitment')"
-      >Global Physician Recruitment Registration</el-menu-item
+      >Global Recruitment of Physicians</el-menu-item
     >
     <el-menu-item index="/about" @click="routeToClick('/about')"
       >About us</el-menu-item

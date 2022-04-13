@@ -1,9 +1,9 @@
 <template lang="pug">
 div
   .digital-medical
-    h2 数字医疗
-    p 虚之实是面向全球的数字医疗公司，我们深信各类脑疾病将在XR+AI领域通过认知训练、精准用药、行为扫描、深度重建等技术得到更好的治疗。
-    h3 我们已经拥有了什么？
+    h2 Digital Healthcare
+    p XDTX is a global digital medical company. We are convinced that various brain diseases will be better treated in the field of XR+AI through technologies such as cognitive training, precise pharmacy, behavioral scanning, and depth reconstruction.
+    h3 What do we already have?
     .block
       .small-block(v-for="item in medicalList")
         .line
@@ -15,9 +15,9 @@ export default {
   data() {
     return {
       medicalList: [
-        "拥有中国唯一一家VR类由国家颁发二类医疗器械证书",
-        "已经执行医保名录",
-        "目前唯一拥有完整商业模式“数字疗法公司”",
+        "The first domestic registration certificate for Class II medical devices in the field of VR psychological disease treatment",
+        "Included in the medical insurance list",
+        "The only “digital therapy company” with an integrated business model up to now",
       ],
     };
   },
@@ -35,7 +35,7 @@ export default {
   h2 {
     font-family: "Microsoft YaHei UI";
     font-weight: 700;
-    font-size: 144px;
+    font-size: 70px;
     color: #4e9cf8;
     text-align: left;
     margin-top: 156px;
