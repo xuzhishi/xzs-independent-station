@@ -2,7 +2,7 @@
 .isc-header
   //- Logo
   Menu
-  //- PersonInfo
+  PersonInfo
 </template>
 
 <script>
@@ -13,7 +13,7 @@ export default {
   components: {
     // Logo: () => import("./Logo"),
     Menu: () => import("./Menu"),
-    // PersonInfo: () => import("./PersonInfo.vue"),
+    PersonInfo: () => import("./PersonInfo.vue"),
   },
   mounted() {
     localStorage.setItem("locale", "en-US");
@@ -24,7 +24,12 @@ export default {
 
 <style lang="scss" scoped>
 .isc-header {
+  width: 59%;
   display: flex;
-  justify-content: space-around;
+  justify-content: space-between;
+  background: rgba(0, 0, 0, 0);
+  margin: 0 auto;
+  position: relative;
+  z-index: 2005;
 }
 </style>

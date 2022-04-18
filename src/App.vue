@@ -3,6 +3,7 @@
   Header
   keep-alive
     router-view
+  Bottom
   //- router-view v-if="!keepAlive" 
 </div>
 </template>
@@ -14,6 +15,7 @@ export default {
   },
   components: {
     Header: () => import("./components/Header.vue"),
+    Bottom: () => import("@/components/Bottom.vue"),
   },
   computed: {
     // 页面缓存 路由中未配置  默认未不缓存
