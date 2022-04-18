@@ -5,7 +5,7 @@
     class="el-menu-demo"
     mode="horizontal"
     @select="handleSelect"
-    text-color="#C4C4C4"
+    text-color="#393837"
     active-text-color="#56A4CB"
   >
     <el-menu-item index="/" @click="routeToClick('/')">
@@ -20,10 +20,10 @@
       >XDTX Metaverse</el-menu-item
     >
     <el-menu-item index="/recruitment" @click="routeToClick('/recruitment')"
-      >全球医师招募注册</el-menu-item
+      >Global Recruitment of Physicians</el-menu-item
     >
     <el-menu-item index="/about" @click="routeToClick('/about')"
-      >关于我们</el-menu-item
+      >About us</el-menu-item
     >
   </el-menu>
 </template>
@@ -32,15 +32,19 @@
 export default {
   data() {
     return {
-      activeIndex: "",
+      activeIndex: "/",
     };
   },
   mounted() {
     this.activeIndex = window.location.pathname;
   },
+  watch: {
+    $route(to) {
+      this.activeIndex = to.path;
+    },
+  },
   methods: {
     handleSelect(key) {
-      console.log(key);
       this.activeIndex = key;
     },
     routeToClick(path) {
@@ -54,6 +58,13 @@ export default {
 ::v-deep.el-menu.el-menu--horizontal {
   border-bottom: none;
   margin-top: 20px;
+  background: rgba(0, 0, 0, 0);
+  .el-menu-item:not(.is-disabled):focus {
+    background-color: rgba(0, 0, 0, 0) !important;
+  }
+  .el-menu-item:not(.is-disabled):hover {
+    background-color: rgba(0, 0, 0, 0) !important;
+  }
 }
 ::v-deep.el-menu--horizontal > .el-menu-item.is-active {
   border-bottom: none;
@@ -67,6 +78,14 @@ export default {
 }
 .logo-image {
   margin-top: -15px;
+  background: rgba(0, 0, 0, 0);
+}
+
+::v-deep .el-menu--horizontal > .el-menu-item:not(.is-disabled):hover {
+  background-color: rgba(0, 0, 0, 0) !important;
+}
+::v-deep .el-menu--horizontal > .el-submenu .el-submenu__title:hover {
+  background-color: rgba(0, 0, 0, 0) !important;
 }
 </style>
 

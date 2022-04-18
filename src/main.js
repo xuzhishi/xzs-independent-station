@@ -6,10 +6,17 @@ import 'element-ui/lib/theme-chalk/index.css';
 // 多语言插件的配置引入
 import VueI18n from 'vue-i18n';
 import "./assets/iconfont/iconfont.css"
+// 配置cookie
+import cookie from 'vue-cookie'
+import VueVideoPlayer from 'vue-video-player'
+import 'video.js/dist/video-js.css'
+import 'vue-video-player/src/custom-theme.css'
 
+Vue.prototype.$cookie = cookie;
 Vue.config.productionTip = false
 Vue.use(ElementUI)
 Vue.use(VueI18n)
+Vue.use(VueVideoPlayer)
 
 const i18n = new VueI18n({
   locale: 'zh-CN',    // 语言标识
@@ -43,8 +50,9 @@ const app = initializeApp(firebaseConfig);
 getAnalytics(app)
 
 
-new Vue({
-  i18n,
-  router,
-  render: h => h(App)
-}).$mount('#app')
+
+  new Vue({
+    i18n,
+    router,
+    render: h => h(App)
+  }).$mount('#app')
