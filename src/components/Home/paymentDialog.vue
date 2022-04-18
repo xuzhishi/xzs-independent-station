@@ -57,7 +57,7 @@ div
         ul
           li.line1
             span(
-              v-for="(item, index) in diseaseList.slice(0, 7)",
+              v-for="(item, index) in diseaseList.slice(0, 6)",
               :key="index"
             )
               span.item(
@@ -65,7 +65,7 @@ div
                 :class="{ currentBack: currentIndex === index }"
               ) {{ item.name }}
           li.line2(v-show="dropDownShow")
-            span(v-for="(item, index) in diseaseList.slice(7)", :key="index")
+            span(v-for="(item, index) in diseaseList.slice(6)", :key="index")
               span.item(
                 @click="selectLine2Color(index, item.name)",
                 :class="{ currentBack: line2Index === index }"
@@ -153,36 +153,36 @@ export default {
       ],
       timeList: [
         {
-          value: "上午 8:30-9:30",
-          label: "上午 8:30-9:30",
+          value: "AM 8:30-9:30",
+          label: "AM 8:30-9:30",
         },
         {
-          value: "上午 9:30-10:30",
-          label: "上午 9:30-10:30",
+          value: "AM 9:30-10:30",
+          label: "AM 9:30-10:30",
         },
         {
-          value: "上午 10:30-11:30",
-          label: "上午 10:30-11:30",
+          value: "AM 10:30-11:30",
+          label: "AM 10:30-11:30",
         },
         {
-          value: "下午 13:30-14:30",
-          label: "下午 13:30-14:30",
+          value: "PM 13:30-14:30",
+          label: "PM 13:30-14:30",
         },
         {
-          value: "下午 14:30-15:30",
-          label: "下午 14:30-15:30",
+          value: "PM 14:30-15:30",
+          label: "PM 14:30-15:30",
         },
         {
-          value: "下午 15:30-16:30",
-          label: "下午 15:30-16:30",
+          value: "PM 15:30-16:30",
+          label: "PM 15:30-16:30",
         },
         {
-          value: "下午 16:30-17:30",
-          label: "下午 16:30-17:30",
+          value: "PM 16:30-17:30",
+          label: "PM 16:30-17:30",
         },
         {
-          value: "下午 17:30-18:30",
-          label: "下午 17:30-18:30",
+          value: "PM 17:30-18:30",
+          label: "PM 17:30-18:30",
         },
       ],
       formLabelWidth: "100px",
@@ -204,7 +204,7 @@ export default {
       inputStartTimeShow: false,
       inputEndTimeShow: false,
       inputTimeDateShow: false,
-      sick: "儿童心理问题",
+      sick: "Children’s Psychological Problems",
     };
   },
   methods: {
@@ -246,7 +246,7 @@ export default {
         var regEmail = /^([1-9]\d?|1[01]\d|120)$/;
         if (this.form.age !== "" && !regEmail.test(this.form.age)) {
           this.$message({
-            message: "年龄最大值为120",
+            message: "The maximum age is 120",
             type: "error",
           });
           this.form.age = "";
@@ -264,7 +264,7 @@ export default {
           /^[A-Za-z0-9\u4e00-\u9fa5]+@[a-zA-Z0-9_-]+(\.[a-zA-Z0-9_-]+)+$/;
         if (this.form.email != "" && !regEmail.test(this.form.email)) {
           this.$message({
-            message: "邮箱格式不正确",
+            message: "The mailbox format is incorrect",
             type: "error",
           });
           this.form.email = "";
@@ -351,7 +351,7 @@ export default {
             if (result.status === 200) {
               const patientName = this.form.name;
               const patientEmail = this.form.email;
-              const patientGender = this.form.gender === "1" ? "女" : "男";
+              const patientGender = this.form.gender === "1" ? "female" : "male";
               const patientAge = this.form.age;
               const patientSick = this.sick;
               const appointmentDate = this.date;
@@ -373,7 +373,7 @@ export default {
               this.$emit("closeDialog");
             }
           } else {
-            this.$message.warning("请切换至以太坊Ethereum主网络进行付款操作!");
+            this.$message.warning("Please switch to Ethereum Ethereum main network for payment!");
           }
         } catch (error) {
           this.$message.error(error);
@@ -496,7 +496,7 @@ export default {
       .item,
       .currentBack {
         display: inline-block;
-        width: 112px;
+        // width: 254px;
         height: 26px;
         background: #eeedeb;
         border-radius: 4px;

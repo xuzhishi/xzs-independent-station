@@ -52,13 +52,16 @@ export default {
   .advantage-advantageList {
     display: flex;
     justify-content: space-between;
-    width: 1200px;
+    width: 1100px;
     margin: 100px auto;
     font-family: "Microsoft YaHei UI";
     font-weight: 700;
     font-size: 14px;
     line-height: 18px;
     color: #393837;
+    .list{
+      width: 200px;
+    }
     p {
       font-weight: normal;
       margin-top: 20px;

@@ -5,8 +5,8 @@ div
       img(src="./../../assets/image/recruitment_banner.jpg")
       .right
         p.line1 Worldwide Physician Recruitment
-        p.line2(style="margin-bottom: 15px") Transformation of Medical Model
-        p.line3 Power of Science and Technology Contributes to Unlimited Medical Care
+        p.line2(style="margin-bottom: 15px;position:relative;top:100px") Transformation of Medical Model
+        p.line3(style="position:relative;top:100px") Power of Science and Technology Contributes to Unlimited Medical Care
 </template>
 
 <script>

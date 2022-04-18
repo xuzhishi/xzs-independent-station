@@ -1,7 +1,7 @@
 <template lang="pug">
 div
   .personInfo
-    span.login(@click="loginClick", v-show="show") 登录
+    span.login(@click="loginClick", v-show="show") Login
     .person-logo.demo-basic--circle(v-show="userShow", @click="userInfoClick")
       .block
         el-avatar(:size="50", :src="avatar")
@@ -14,7 +14,7 @@ div
     :dialogVisible="dialogVisible",
     @handleCloseClick="handleCloseClick",
     :tableData="tableData",
-    :loading="loading"
+    :loading="loading",
     :avatar="avatar"
   )
   loginDialog(
@@ -61,20 +61,20 @@ export default {
       loading: true,
       loginDialogVisible: false, //未登录提示弹框
       userShow: false,
-      avatarList:[
+      avatarList: [
         require("@/assets/image/avatar.jpg"),
         require("@/assets/image/avatar1.jpg"),
         require("@/assets/image/avatar2.jpg"),
         require("@/assets/image/avatar3.jpg"),
         require("@/assets/image/avatar4.jpg"),
-        require("@/assets/image/avatar4.jpg")
+        require("@/assets/image/avatar4.jpg"),
       ],
-      avatar:'',
-      avatarIdx:0,
+      avatar: "",
+      avatarIdx: 0,
     };
   },
   mounted() {
-    this.avatar = this.avatarList[this.avatarIdx]
+    this.avatar = this.avatarList[this.avatarIdx];
     if (window.ethereum) {
       window.ethereum.enable().then(async (res) => {
         localStorage.setItem("address", res[0]);
@@ -94,7 +94,7 @@ export default {
         }
       });
     } else {
-      alert("请安装MetaMask钱包");
+      alert("Please install metamask Wallet");
       this.show = true;
     }
   },
@@ -105,9 +105,9 @@ export default {
     },
     // 登录确定按钮
     async confirmHandleClick() {
-      let len = this.avatarList.length
-      this.avatarIdx = parseInt(Math.random(0,len-1)*7)
-      this.avatar = this.avatarList[this.avatarIdx]
+      let len = this.avatarList.length;
+      this.avatarIdx = parseInt(Math.random(0, len - 1) * 7);
+      this.avatar = this.avatarList[this.avatarIdx];
       this.centerDialogVisible = false;
       if (window.ethereum) {
         window.ethereum.enable().then(async (res) => {
@@ -129,19 +129,19 @@ export default {
             ) {
               var result = await login(res[0]);
               if (result.status === 200) {
-                this.$message.success("登录成功");
+                this.$message.success("Login successful");
                 this.show = false;
                 this.userShow = true;
               }
             } else {
-              this.$message.success("登录成功");
+              this.$message.success("Login successful");
               this.show = false;
               this.userShow = true;
             }
           }
         });
       } else {
-        alert("请安装MetaMask钱包");
+        alert("Please install metamask Wallet");
         this.show = true;
       }
     },
@@ -168,7 +168,7 @@ export default {
           }
         });
       } else {
-        alert("请安装MetaMask钱包");
+        alert("Please install metamask Wallet");
       }
     },
     handleCloseClick() {
@@ -211,11 +211,6 @@ export default {
   .person-logo {
     margin-left: 100px;
     margin-top: 10px;
-    // position: relative;
-    // top: 4px;
-    // // left: 40px;
-    // width: 25px;
-    // height: 25px;
     cursor: pointer;
   }
 }

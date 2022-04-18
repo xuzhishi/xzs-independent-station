@@ -3,7 +3,7 @@ div
   .home-banner
     el-carousel(
       trigger="click",
-      height="1195px",
+      height="950px",
       arrow="always",
       :autoplay="false",
       @change="imgCut",
@@ -91,27 +91,25 @@ export default {
 }
 ::v-deep .el-carousel--horizontal {
   width: 100%;
-  height: 1195px;
-  // background-color: rgba(0, 0, 0, 0);
+  // height: 1195px;
   margin: 0 auto;
   margin-top: -80px;
   position: relative;
   background: #f0f0f0;
-  // background: pink;
   overflow: hidden;
   .el-carousel__indicators--horizontal {
     display: none;
   }
   .el-carousel__arrow--left {
-    // margin-top: 36px;
-    margin-left: 19%;
+    margin-left: 20.2%;
+    margin-top: 10px;
   }
   .el-carousel__arrow--right {
     margin-right: 19%;
+    margin-top: 10px;
   }
   .el-carousel__item:nth-child(2n) {
-    // background-color: rgba(0, 0, 0, 0);
-    height: 1195px;
+    // height: 1195px;
     background: linear-gradient(
       180deg,
       rgba(196, 196, 196, 0.1501) 0%,
@@ -121,8 +119,7 @@ export default {
     background-color: #f7f4f4;
   }
   .el-carousel__item:nth-child(2n + 1) {
-    // background-color: rgba(0, 0, 0, 0);
-    height: 1195px;
+    // height: 1195px;
     background: linear-gradient(
       180deg,
       rgba(196, 196, 196, 0.1501) 0%,
@@ -133,11 +130,11 @@ export default {
   .el-carousel__item {
     .banner {
       width: 100%;
-      height: 107%;
+      height: 100%;
       background: url("./../../assets/image/home__banner__new.jpg") no-repeat;
-      background-size: cover;
+      background-size: 100%;
       overflow: hidden;
-      margin-top: -80px;
+      margin-top: 0px;
       box-sizing: border-box;
       .technical-introduction {
         width: 1198px;
@@ -146,10 +143,10 @@ export default {
         margin-top: 425px;
         display: flex;
         box-sizing: border-box;
-        padding-left: 420px;
+        padding-left: 20%;
         position: absolute;
         z-index: 55;
-        // bottom: 0;
+        bottom: 0;
         dl {
           width: 216px;
           height: 200px;
@@ -191,20 +188,12 @@ export default {
           width: 158px;
         }
       }
-      // padding-bottom: 22%;
-      // position: relative;
     }
-    // .video{
-    //   height: 9899px !important;
-    // }
     .banner-left {
       width: 1200px;
       text-align: left;
-
-      // margin: 0 auto;
-      margin-top: 434px;
-      margin-left: 581px;
-      // margin-left: 100px;
+      margin-top: 16%;
+      margin-left: 23%;
       .title {
         font-family: Arial;
         font-weight: bold;

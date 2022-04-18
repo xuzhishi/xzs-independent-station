@@ -50,13 +50,14 @@ export default {
     font-weight: 700;
     font-size: 48px;
     color: #4e9cf8;
-    margin-top: 107px;
+    margin-top: 50px;
   }
   .subTitle {
     font-family: "Microsoft YaHei UI";
     font-weight: 700;
     font-size: 24px;
     color: #393837;
+    line-height: 50px;
     margin-top: 43px;
     margin-bottom: 44px;
   }

@@ -31,7 +31,7 @@ export default {};
     text-align: left;
     position: absolute;
     top: 97px;
-    left: 25%;
+    left: 21.5%;
     z-index: 2;
     h4 {
       margin-bottom: 24px;

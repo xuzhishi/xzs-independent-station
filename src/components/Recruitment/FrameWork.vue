@@ -139,17 +139,19 @@ export default {
   }
   .expandBlock {
     height: 459px;
-    width: 695px;
+    width: 700px;
     border-radius: 15px;
     background: #fff;
     overflow: hidden;
     box-sizing: border-box;
     padding: 0 20px;
     display: none;
-    margin-left: 822px;
+    // margin-left: 43%;
     position: absolute;
     z-index: 999;
     top: 224px;
+    left: 43%;
+    cursor: pointer;
     h4 {
       margin-top: 30px;
       margin-bottom: 20px;

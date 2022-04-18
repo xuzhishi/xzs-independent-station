@@ -117,15 +117,18 @@ export default {
               }
 
               const exchangeResult = await exchangeRate();
+              const r = exchangeResult.data.filter(item =>{
+                return item.symbol == "ETHUSDT"
+              })
               this.exchangeRate =
-                parseFloat(exchangeResult.data[0].result, 2) * 0.031;
+                parseFloat(r[0].price, 2) * 0.031;
             } catch (error) {
               this.$message.error(error);
             }
           }
         });
       } else {
-        alert("请安装MetaMask钱包");
+        alert("Please install metamask Wallet");
       }
     },
     closeDialog() {
@@ -180,19 +183,19 @@ export default {
             ) {
               var result = await login(res[0]);
               if (result.status === 200) {
-                this.$message.success("登录成功");
+                this.$message.success("Login successful");
                 this.show = false;
                 this.userShow = true;
               }
             } else {
-              this.$message.success("登录成功");
+              this.$message.success("Login successful");
               this.show = false;
               this.userShow = true;
             }
           }
         });
       } else {
-        alert("请安装MetaMask钱包");
+        alert("Please install metamask Wallet");
         this.show = true;
       }
     },
@@ -219,7 +222,6 @@ export default {
     .listen-left {
       .left-title {
         width: 592px;
-        // margin-left: 176px;
         margin-top: 150px;
         text-align: left;
         .line {
@@ -244,7 +246,6 @@ export default {
         justify-content: space-between;
         width: 592px;
         margin-top: 20px;
-        // margin-left: 176px;
         margin-bottom: 26px;
         h5 {
           font-family: "Microsoft YaHei UI";
@@ -265,7 +266,6 @@ export default {
       .left-content {
         width: 592px;
         height: 200px;
-        // margin-left: 176px;
         .content {
           font-family: "Microsoft YaHei UI";
           font-weight: 400;
@@ -290,7 +290,6 @@ export default {
         line-height: 37px;
         margin-top: 37px;
         cursor: pointer;
-        // margin-left: 176px;
       }
     }
     .listen-right {

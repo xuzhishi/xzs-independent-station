@@ -4,7 +4,7 @@ div
     .block
       p We are looking for talented professionals to join our international team of the Metaverse hospital and contribute to this great mission.
       p We are committed to building a diverse, multicultural and gender-balanced team of which members from all over the world are broadly representative.
-      p Our values and our DNA have always taken public health service as our own responsibility. We are professional and dedicated to outstanding health care achievements, honesty and integrity, sincere cooperation, mutual assistance and mutual love.
+      p(style="line-height:50px;") Our values and our DNA have always taken public health service as our own responsibility. We are professional and dedicated to outstanding health care achievements, honesty and integrity, sincere cooperation, mutual assistance and mutual love.
 </template>
 
 <script>

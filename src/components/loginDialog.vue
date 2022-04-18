@@ -1,14 +1,14 @@
 <template lang="pug">
 div
   el-dialog(
-    title="登录后才可以进行后续操作",
+    title="Subsequent operations can only be performed after logging in",
     :visible.sync="loginDialogVisible",
     center,
     :show-close="false"
   )
     span.dialog-footer(slot="footer")
-      .cancel(@click="cancelClick") 取 消
-      .login(type="primary", @click="confirmClick") 去登录
+      .cancel(@click="cancelClick") Cancel
+      .login(type="primary", @click="confirmClick") Go login
 </template>
 
 <script>

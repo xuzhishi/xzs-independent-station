@@ -48,6 +48,7 @@ export default {
     font-size: 24px;
     line-height: 30px;
     color: #393837;
+    text-align: left;
   }
   h3 {
     font-family: "Microsoft YaHei UI";

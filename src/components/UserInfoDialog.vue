@@ -7,7 +7,7 @@ div
       :tab-position="tabPosition",
       style="height: 500px; margin-top: 50px"
     )
-      el-tab-pane(label="医生预约")
+      el-tab-pane(label="Doctor Appointment ")
         .table
           el-table(
             :data="tableData",
@@ -17,30 +17,30 @@ div
           )
             el-table-column(
               prop="reserveDate",
-              label="预约日期",
+              label="Appointment Date",
               width="110",
               align="center"
             )
             el-table-column(
               prop="reserveTime",
-              label="预约时间",
+              label="Appointment Time",
               width="190",
               align="center"
             )
               template(slot-scope="scope")
-                span {{ scope.row.reserveTime.slice(6, 8) < 12 ? `上午 ${scope.row.reserveTime}` : `下午 ${scope.row.reserveTime}` }}
+                span {{ scope.row.reserveTime.slice(6, 8) < 12 ? `AM ${scope.row.reserveTime}` : `PM ${scope.row.reserveTime}` }}
             el-table-column(
               prop="status",
-              label="状态",
+              label="Appointment Status",
               width="110",
               align="center"
             )
               template(slot-scope="scope")
-                span {{ scope.row.status === 1 ? '预约成功' : '预约失败' }}
-            el-table-column(prop="", label="备注", width="280", align="center")
+                span {{ scope.row.status === 1 ? 'Appointment' : 'Appointment failed' }}
+            el-table-column(prop="", label="Remarks", width="280", align="center" :show-overflow-tooltip="true")
               template(slot-scope="scope")
-                span 请准时前往海拉医院心理咨询室
-      el-tab-pane(label="交易订单")
+                span Please arrive by your appointment time at Metaverse Hela Central Hospital's psychiatric counseling room 
+      el-tab-pane(label="Transaction Order")
         .table
           el-table(
             :data="tableData",
@@ -74,18 +74,18 @@ div
                 span {{ scope.row.fee + ' Ether' }}
             el-table-column(
               prop="reserveDate",
-              label="下单时间",
+              label="Order Time",
               width="120",
               align="center"
             )
             el-table-column(
               prop="status",
-              label="状态",
+              label="Appointment Status",
               width="130",
               align="center"
             )
               template(slot-scope="scope")
-                span {{ scope.row.status === 1 ? '付款成功' : '等待确认' }}
+                span {{ scope.row.status === 1 ? 'Payment Done' : 'Confirmation' }}
 </template>
 
 <script>
@@ -114,7 +114,7 @@ export default {
 
 <style lang="scss" scoped>
 ::v-deep .el-dialog {
-  width: 917px;
+  width: 1018px;
   height: 680px;
   box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
   border-radius: 20px;
@@ -136,7 +136,7 @@ export default {
     }
   }
   .border {
-    width: 110px;
+    width: 227px;
     height: 70px;
     position: absolute;
     left: 20px;

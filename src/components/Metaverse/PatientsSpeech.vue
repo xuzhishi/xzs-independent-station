@@ -18,7 +18,7 @@ div
           span.iconfont.icon-xiaoxi 7
       .line
   .NFT-store
-    .btn(@click="storeClick") {{ $t('Metaverse.NFTStore') }}
+    .btn(@click="storeClick") Enter Haila hospital
     .block
       p For the first time, please note:
       p PC experience: 1 Download steam, 2 Download vrchat and search for room name - Haila hospital

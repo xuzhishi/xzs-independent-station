@@ -4,7 +4,7 @@ div
     .left
       h2
         span The XDTX specially invited
-        span treatment physician: Dr. Zhou Le
+        span treatment physician:<br/>Dr. Zhou Le
       .content
         .paragraph(v-for="item in content")
           p {{ item }}
